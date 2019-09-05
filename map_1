@@ -1,0 +1,12 @@
+3
+##qwerty
+##start
+adin 1 0
+##end
+dwa 5 0
+tri 9 0
+chetire 13 0
+#comment on dat stuff
+adin-tri
+tri-chetire
+chetire-dwa
