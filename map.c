@@ -20,6 +20,7 @@ void	check_ants_n(char *s, t_info *info)
 {
 	info->ants = ft_atoi(s);
 	printf("%s\n", s);
+	free(s);
 	if (info->ants <= 0)
 		ERROR_EXIT;
 }
@@ -54,6 +55,9 @@ void	check_room(char *s, t_info *info, char flag)
 			info->end = info->graph;
 			printf("%s\n", s);
 		}
+		//free(*arr);
+		//free(arr);
+		free(arr[0]); free(arr[1]); free(arr[2]); free(arr); //free(*arr);
 	}
 }
 
@@ -65,11 +69,13 @@ void	check_dashes(char *s, t_info *info)
 		{
 			get_next_line(0, &s);
 			check_room(s, info, 's');
+			free(s);
 		}
 		else if (!ft_strcmp(s, "##end"))
 		{
 			get_next_line(0, &s);
 			check_room(s, info, 'e');
+			free(s);
 		}
 	}
 }
@@ -123,6 +129,7 @@ void	check_connection(char *s, t_info *info)
 			temp = temp->next;
 		}
 		//ERROR_EXIT;//no such room exists in the graph
+		free(arr[0]); free(arr[1]); free(arr); //free(*arr);
 	}
 }
 
@@ -163,6 +170,7 @@ int		map(t_info *info)
 	{
 		printf("%s\n", s);
 		check_line(s, info);
+		free(s);
 	}
 	printf("\n");
 	connect_origins(info);

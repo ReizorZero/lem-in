@@ -4,7 +4,7 @@ SRCF = main.c libft/get_next_line.c map.c operate.c new_elements.c bfs.c additio
 
 LIB = libft/libft.a
 
-CC = gcc
+CC = gcc #-g -fsanitize=address
 
 CFLAG = -Wall -Wextra -Werror
 
