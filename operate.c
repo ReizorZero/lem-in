@@ -66,6 +66,7 @@ void	fucking_ants(t_info *info)
 	}
 	
 	//CONNECT ANTS WITH CORRESPONDING PATHS
+
 	t_ant *temp_ant;
 	t_path_list *temp_paths;
 	int set_delay;
@@ -124,6 +125,11 @@ void	fucking_ants(t_info *info)
 			printf("\n");
 		//}
 	}
+	free(ants);
+	free(ants_top);
+	//DO NOT CHANGE LEAKS AMOUNT
+	//free(temp_ant);
+	//free(temp_paths);
 }
 
 
@@ -144,6 +150,8 @@ int	pathscmp(t_path *path1, t_path *path2)
 		p2 = p2->prev;
 	}
 	return (0);
+	//free(p1);
+	//free(p2);
 }
 
 void	operate(t_info *info)
@@ -175,4 +183,5 @@ void	operate(t_info *info)
 	}
 	output_paths(info);
 	fucking_ants(info);
+	//free(shortest);
 }

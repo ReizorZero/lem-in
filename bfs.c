@@ -38,6 +38,11 @@ void	bfs(t_info *info)
 		unvisit->is_empty = 1;
 		unvisit = unvisit->next;
 	}
+	free(qlist);
+	//DO NOT CHANGE LEAKS AMOUNT
+	//free(qlist_top);
+	//free(temp_adj);
+	//free(unvisit);
 }
 
 void	remove_connection(t_room *from, char *to)
@@ -68,6 +73,7 @@ void	remove_connection(t_room *from, char *to)
 			temp_adj = temp_adj->next;
 		}
 	}
+	//free(temp_adj);
 }
 
 t_path	*shortest_path(t_info *info)
@@ -104,5 +110,10 @@ t_path	*shortest_path(t_info *info)
 		info->max_path_len = path_len - 1;
 	//printf("\n");
 	//printf("\n");
+
+	//free(way);
+	//free(shortest);
+	//free(shortest_top);
+	//free(head);
 	return (shortest_top);
 }
