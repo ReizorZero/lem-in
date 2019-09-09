@@ -32,6 +32,20 @@ void	check_ants_n(char *s, t_info *info)
 		ERROR_EXIT;
 }
 
+int check_existing(t_info *info, char *room_name)
+{
+	t_room *temp;
+
+	temp = info->graph_top;
+	while (temp)
+	{
+		if (!ft_strcmp(temp->name,room_name))
+			ERROR_EXIT;
+		temp = temp->next;
+	}
+	return (1);
+}
+
 int	check_room(char *s, t_info *info, char flag)
 {
 	char	**arr;
@@ -75,6 +89,7 @@ int	check_room(char *s, t_info *info, char flag)
 		}
 		else
 		{
+			check_existing(info, arr[0]);
 			info->graph->next = new_room(arr[0]);
 			info->graph = info->graph->next;
 		}
@@ -133,6 +148,28 @@ void	check_dashes(char *s, t_info *info)
 	}
 }
 
+void connection_exists(t_info *info, char *room_1, char *room_2)
+{
+	t_room *temp;
+	t_room *temp_adj;
+
+	temp = info->graph_top;
+	while (temp)
+	{
+		if (!ft_strcmp(temp->name, room_1))
+		{
+			temp_adj = temp->adj_top;
+			while (temp_adj)
+			{
+				if (!ft_strcmp(temp_adj->name, room_2))
+					ERROR_EXIT;
+				temp_adj = temp_adj->next;
+			}
+		}
+		temp = temp->next;
+	}
+}
+
 int	check_connection(char *s, t_info *info)
 {
 	int i;
@@ -158,6 +195,7 @@ int	check_connection(char *s, t_info *info)
 		if (!arr[1] || arr[2])
 			ERROR_EXIT;
 		//printf("\t[%s]-[%s] is a connection\n", arr[0], arr[1]);
+		connection_exists(info, arr[0], arr[1]);
 		temp = info->graph_top;
 		while (temp)
 		{
