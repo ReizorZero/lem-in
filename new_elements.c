@@ -63,6 +63,8 @@ t_info *new_info(void)
 	if (!info)
 		ERROR_EXIT;
 	info->ants = 0;
+	info->s_rooms = 0;
+	info->e_rooms = 0;
 	info->start = NULL;
 	info->end = NULL;
 	info->graph = NULL;
@@ -71,5 +73,6 @@ t_info *new_info(void)
 	info->paths_top = NULL;
 	info->paths_n = 0;
 	info->max_path_len = 0;
+	info->sorry = 0;
 	return (info);
 }

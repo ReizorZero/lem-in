@@ -32,7 +32,7 @@ void	check_ants_n(char *s, t_info *info)
 		ERROR_EXIT;
 }
 
-int	check_room(char *s, t_info *info, char flag)
+void	check_room(char *s, t_info *info, char flag)
 {
 	char	**arr;
 	int i;
@@ -93,9 +93,9 @@ int	check_room(char *s, t_info *info, char flag)
 		//free(*arr);
 		//free(arr);
 		free(arr[0]); free(arr[1]); free(arr[2]); free(arr); //free(*arr);
-        return (1);
 	}
-    return (0);
+	// else
+	// 	ERROR_EXIT;
 }
 
 void	check_dashes(char *s, t_info *info)
@@ -133,7 +133,7 @@ void	check_dashes(char *s, t_info *info)
 	}
 }
 
-int	check_connection(char *s, t_info *info)
+void	check_connection(char *s, t_info *info)
 {
 	int i;
 	char	**arr;
@@ -204,24 +204,18 @@ int	check_connection(char *s, t_info *info)
 			ERROR_EXIT;
 		//ERROR_EXIT;//no such room exists in the graph
 		free(arr[0]); free(arr[1]); free(arr); //free(*arr);
-        info->sorry = 'c';
-        return (1);
 	}
-    return (0);
 }
 
 void	check_line(char *s, t_info *info)
 {
-    int found_room;
-    int found_connection;
-
-    if (s[0] == '\0')
+	char prev;
+	
+	if (s[0] == '\0')
 		ERROR_EXIT;
 	check_dashes(s, info);
-    found_connection = check_connection(s, info);
-	found_room = check_room(s, info, '-');
-    if (found_room == 1 && info->sorry == 'c')
-        ERROR_EXIT;
+	check_room(s, info, '-');
+	check_connection(s, info);
 }
 
 void	connect_origins(t_info *info)

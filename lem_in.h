@@ -40,6 +40,8 @@ typedef struct	s_path_list
 typedef struct	s_info
 {
 	int		ants;
+	int		s_rooms;
+	int		e_rooms;
 	t_room	*start;
 	t_room	*end;
 	t_room	*graph;
@@ -48,6 +50,7 @@ typedef struct	s_info
 	t_path_list	*paths_top;
 	int			paths_n;
 	int			max_path_len;
+	char		sorry;
 	//t_path	*shortest_path;//for the case with one ant
 }				t_info;
 

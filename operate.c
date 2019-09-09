@@ -158,7 +158,11 @@ void	operate(t_info *info)
 {
 	t_path *shortest;
 
+	if (!info->start || !info->end)
+		ERROR_EXIT;
 	if (!info->start->adj_top || !info->end->adj_top)
+		ERROR_EXIT;
+	if (info->s_rooms != 1 || info->e_rooms != 1)
 		ERROR_EXIT;
 	while (info->start->adj_top)
 	{
