@@ -101,7 +101,13 @@ t_path	*shortest_path(t_info *info)
 		shortest->head = head;
 		//printf("%s -> ", shortest->actual->name);
 		if (shortest->prev)
+		{
 			remove_connection(shortest->actual, shortest->prev->actual->name);
+			//printf(" [ removed connection: %s-%s ] ", shortest->actual->name, shortest->prev->actual->name);
+			//remove_connection(shortest->prev->actual, shortest->actual->name);
+			//printf(" [ removed connection: %s-%s ] ", shortest->prev->actual->name, shortest->actual->name);
+		}
+		//remove_connection(shortest->prev->actual, shortest->actual->name);
 		path_len++;
 		shortest = shortest->prev;
 	}

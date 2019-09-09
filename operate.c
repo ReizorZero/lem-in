@@ -110,23 +110,23 @@ void	fucking_ants(t_info *info)
 				if (temp_ant->ant_path->actual != info->end)
 				{
 					if (temp_ant->ant_path->actual != info->start)
-					printf("L%i-%s\t", temp_ant->index, temp_ant->ant_path->actual->name);
+					printf("L%i-%s ", temp_ant->index, temp_ant->ant_path->actual->name);
 				}
 				else if (temp_ant->at_end == 0)
 				{
-					printf("L%i-%s\t", temp_ant->index, temp_ant->ant_path->actual->name);
+					printf("L%i-%s ", temp_ant->index, temp_ant->ant_path->actual->name);
 					temp_ant->at_end = 1;
 				}
 			temp_ant = temp_ant->next;
 		}
-		//printf("[ants: %i] ", info->ants);
+		//printf(" [ants: %i] ", info->ants);
 		//if (info->ants >= -1)
 		//{
 			printf("\n");
 		//}
 	}
 	free(ants);
-	free(ants_top);
+	//free(ants_top);//GAVE ME SEGV SOMEHOW
 	//DO NOT CHANGE LEAKS AMOUNT
 	//free(temp_ant);
 	//free(temp_paths);
@@ -158,6 +158,8 @@ void	operate(t_info *info)
 {
 	t_path *shortest;
 
+	if (!info->start->adj_top || !info->end->adj_top)
+		ERROR_EXIT;
 	while (info->start->adj_top)
 	{
 		bfs(info);

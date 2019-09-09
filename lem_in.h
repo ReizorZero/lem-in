@@ -66,6 +66,14 @@ typedef struct	s_qlist
 	t_room			*actual;
 }				t_qlist;
 
+typedef struct	s_input
+{
+	char *name;
+	int x;
+	int y;
+	struct	s_input *next;
+}				t_input;
+
 int			map(t_info *info);
 t_info		*new_info(void);
 t_room		*new_room(char *name);

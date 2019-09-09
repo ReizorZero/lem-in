@@ -38,10 +38,13 @@ int		main(void)
 
 	info = new_info();
 	if (map(info))
+	{
+		print_two_dim(info->graph_top);
 		operate(info);
+		//printf("SUBSTITUTE\n");
+	}
 	else
 		ERROR_EXIT;
-	//free(info);
-	system("leaks -q lem-in");
+	//system("leaks -q lem-in");
 	return (0);
 }
