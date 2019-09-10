@@ -39,6 +39,12 @@ typedef struct	s_path_list
 	//int			ant_index;
 }				t_path_list;
 
+typedef struct	s_input
+{
+	char *str;
+	struct	s_input *next;
+}				t_input;
+
 typedef struct	s_info
 {
 	int		ants;
@@ -53,6 +59,8 @@ typedef struct	s_info
 	int			paths_n;
 	int			max_path_len;
 	char		sorry;
+	t_input		*input;
+	t_input		*input_top;
 	//t_path	*shortest_path;//for the case with one ant
 }				t_info;
 
@@ -71,14 +79,9 @@ typedef struct	s_qlist
 	t_room			*actual;
 }				t_qlist;
 
-typedef struct	s_input
-{
-	char *name;
-	struct	s_input *next;
-}				t_input;
-
 int			map(t_info *info);
 t_info		*new_info(void);
+t_input		*new_input(char *str);
 t_room		*new_room(char *name, int x, int y);
 t_qlist		*new_qlist(t_room *room);
 t_path		*new_path(t_room *room);

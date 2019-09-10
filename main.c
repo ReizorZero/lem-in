@@ -32,6 +32,21 @@ void	print_two_dim(t_room *dat)//REMOVE THEN
 	}
 }
 
+void print_file(t_info *info)
+{
+	t_input *temp_inpt;
+
+	temp_inpt = info->input_top;
+	//printf("shitfuck\n");
+	while (temp_inpt)
+	{
+		printf("%s\n", temp_inpt->str);
+		temp_inpt = temp_inpt->next;
+	}
+	printf("\n");
+	//and delete list with input after dat
+}
+
 int		main(void)
 {
 	t_info *info;
@@ -40,7 +55,7 @@ int		main(void)
 	if (map(info))
 	{
 		//print_two_dim(info->graph_top);
-		///print_file();
+		print_file(info);
 		operate(info);
 		//printf("SUBSTITUTE\n");
 	}

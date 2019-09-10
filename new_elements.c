@@ -76,5 +76,19 @@ t_info *new_info(void)
 	info->paths_n = 0;
 	info->max_path_len = 0;
 	info->sorry = 0;
+	info->input = NULL;
+	info->input_top = NULL;
 	return (info);
+}
+
+t_input *new_input(char *str)
+{
+	t_input *input;
+
+	input = (t_input*)malloc(sizeof(t_input));
+	if (!input)
+		return (NULL);
+	input->str = ft_strdup(str);//clear memory here should you do it
+	input->next = NULL;
+	return (input);
 }
