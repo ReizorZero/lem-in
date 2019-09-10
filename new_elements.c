@@ -1,6 +1,6 @@
 #include "lem_in.h"
 
-t_room		*new_room(char *name)
+t_room		*new_room(char *name, int x, int y)
 {
 	t_room *room;
 
@@ -13,6 +13,8 @@ t_room		*new_room(char *name)
 	room->c_from = NULL;
 	room->adj_origin = NULL;
 	room->is_empty = 1;
+	room->x = x;
+	room->y = y;
 	return (room);
 }
 

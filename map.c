@@ -32,7 +32,7 @@ void	check_ants_n(char *s, t_info *info)
 		ERROR_EXIT;
 }
 
-int check_existing(t_info *info, char *room_name)
+int check_existing(t_info *info, char *room_name, int x, int y)
 {
 	t_room *temp;
 
@@ -40,6 +40,8 @@ int check_existing(t_info *info, char *room_name)
 	while (temp)
 	{
 		if (!ft_strcmp(temp->name,room_name))
+			ERROR_EXIT;
+		if (temp->x == x && temp->y == y)
 			ERROR_EXIT;
 		temp = temp->next;
 	}
@@ -84,13 +86,13 @@ int	check_room(char *s, t_info *info, char flag)
 		//printf("[%s] [%s] [%s] is a room\n", arr[0], arr[1], arr[2]);
 		if (!info->graph)
 		{
-			info->graph = new_room(arr[0]);
+			info->graph = new_room(arr[0], ft_atoi(arr[1]), ft_atoi(arr[2]));
 			info->graph_top = info->graph;
 		}
 		else
 		{
-			check_existing(info, arr[0]);
-			info->graph->next = new_room(arr[0]);
+			check_existing(info, arr[0], ft_atoi(arr[1]), ft_atoi(arr[2]));
+			info->graph->next = new_room(arr[0], ft_atoi(arr[1]), ft_atoi(arr[2]));
 			info->graph = info->graph->next;
 		}
 		if (flag == 's')
@@ -204,12 +206,12 @@ int	check_connection(char *s, t_info *info)
 				room_found = 1;
 				if (!temp->adj_room)
 				{
-					temp->adj_room = new_room(arr[1]);
+					temp->adj_room = new_room(arr[1], 0, 0);
 					temp->adj_top = temp->adj_room;
 				}
 				else
 				{
-					temp->adj_room->next = new_room(arr[1]);
+					temp->adj_room->next = new_room(arr[1], 0, 0);
 					temp->adj_room = temp->adj_room->next;
 				}
 			}
@@ -227,12 +229,12 @@ int	check_connection(char *s, t_info *info)
 				room_found = 1;
 				if (!temp->adj_room)
 				{
-					temp->adj_room = new_room(arr[0]);
+					temp->adj_room = new_room(arr[0], 0, 0);
 					temp->adj_top = temp->adj_room;
 				}
 				else
 				{
-					temp->adj_room->next = new_room(arr[0]);
+					temp->adj_room->next = new_room(arr[0], 0, 0);
 					temp->adj_room = temp->adj_room->next;
 				}
 			}
