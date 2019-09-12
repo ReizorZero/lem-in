@@ -95,7 +95,7 @@ int	check_room(char *s, t_info *info, char flag)
 		i = 0;
 		while (arr[2][i] != '\0')
 		{
-			if (!ft_isdigit(arr[1][i]))
+			if (!ft_isdigit(arr[2][i]))
 				ERROR_EXIT;
 			i++;
 		}

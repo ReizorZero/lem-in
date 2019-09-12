@@ -165,9 +165,21 @@ void	operate(t_info *info)
 	if (info->s_rooms != 1 || info->e_rooms != 1)
 		ERROR_EXIT;
 	while (info->start->adj_top)
+	//for (int i = 0; i < 2; i++)
 	{
+		// printf("BEFORE BFS:\n");
+		// print_two_dim(info->graph_top);
+		// printf("\n");
 		bfs(info);
-		shortest = shortest_path(info);
+		// printf("AFTER BFS:\n");
+		// print_two_dim(info->graph_top);
+		//printf("\n");
+		shortest = shortest_path(info);//<-----SEGV IS HERE
+		if (!shortest)//didn't find a way, so stop the BFS
+		{
+			info->start->adj_top = NULL;
+			break ;
+		}
 		if (!info->paths)
 		{
 			info->paths = new_path_list(shortest);
@@ -184,9 +196,17 @@ void	operate(t_info *info)
 			else
 				break ;
 		}
+		//printf("|| %s ||", info->graph_top->next->next->name);
+		//if (info->graph_top->next->next->c_from)
+			//info->graph_top->next->next->c_from = NULL;
 		if (!info->paths_top)
 			info->paths_top = info->paths;
+		//printf("AFTER BFS:\n");
+		//print_two_dim(info->graph_top);
+		//printf("\n");
 	}
+	//print_two_dim(info->graph_top);
+	//printf("\n");
 	output_paths(info);
 	fucking_ants(info);
 	//free(shortest);

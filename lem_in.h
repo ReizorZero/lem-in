@@ -89,6 +89,8 @@ t_path_list *new_path_list(t_path *path);
 void		operate(t_info *info);
 void		bfs(t_info *info);
 t_path		*shortest_path(t_info *info);
-void		additional_paths(t_info *info);
+void		additional_paths(t_info *info);//I DON'T EVEN USE DIS
+
+void	print_two_dim(t_room *dat);//REMOVE THEN
 
 #endif

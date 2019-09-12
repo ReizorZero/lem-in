@@ -37,7 +37,6 @@ void print_file(t_info *info)
 	t_input *temp_inpt;
 
 	temp_inpt = info->input_top;
-	//printf("shitfuck\n");
 	while (temp_inpt)
 	{
 		printf("%s\n", temp_inpt->str);
@@ -54,10 +53,10 @@ int		main(void)
 	info = new_info();
 	if (map(info))
 	{
-		//print_two_dim(info->graph_top);
 		print_file(info);
+		//print_two_dim(info->graph_top);
+		//printf("\n");
 		operate(info);
-		//printf("SUBSTITUTE\n");
 	}
 	else
 		ERROR_EXIT;
