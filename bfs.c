@@ -1,5 +1,19 @@
 #include "lem_in.h"
 
+void	unvisit_rooms(t_info *info)
+{
+	t_room *unvisit;
+	
+	unvisit = info->graph_top;
+	while (unvisit)
+	{
+		// if (unvisit->c_from) 
+		// 	unvisit->c_from = NULL;
+		unvisit->is_empty = 1;
+		unvisit = unvisit->next;
+	}
+}
+
 void	bfs(t_info *info)
 {
 	t_qlist *qlist;
@@ -37,17 +51,7 @@ void	bfs(t_info *info)
 		}
 		qlist_top = qlist_top->next;
 	}
-
-	//==========MAKE A SEPARATE FUNCTION
-	t_room *unvisit;
-	unvisit = info->graph_top;
-	while (unvisit)
-	{
-		// if (unvisit->c_from) 
-		// 	unvisit->c_from = NULL;
-		unvisit->is_empty = 1;
-		unvisit = unvisit->next;
-	}
+	unvisit_rooms(info);
 }
 
 void	remove_connection(t_room *from, char *to)

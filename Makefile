@@ -1,6 +1,6 @@
 NAME = lem-in
 
-SRCF = main.c libft/get_next_line.c map.c operate.c new_elements.c bfs.c additional_paths.c
+SRCF = main.c libft/get_next_line.c map.c operate.c new_elements.c bfs.c
 
 LIB = libft/libft.a
 
