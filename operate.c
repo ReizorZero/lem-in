@@ -37,8 +37,12 @@ t_ant *new_ant(int index)
 
 t_path *do_fucking_step(t_path *curr_path, t_info *info)
 {
+	//int x = info->ants; x++;
 	if (!curr_path->prev)
+	{
+		//printf(" {{ants: %i}} ", info->ants);
 		info->ants--;
+	}
 	else
 		curr_path = curr_path->prev;
 	return (curr_path);
@@ -64,9 +68,9 @@ void	fucking_ants(t_info *info)
 			ants_top = ants;
 		ants_n++;
 	}
+	//printf("ANTS MADE: %i\n", ants_n);
 	
 	//CONNECT ANTS WITH CORRESPONDING PATHS
-
 	t_ant *temp_ant;
 	t_path_list *temp_paths;
 	int set_delay;
@@ -99,6 +103,7 @@ void	fucking_ants(t_info *info)
 		temp_ant = temp_ant->next;
 	}
 	while (info->ants > 0)
+	//for (int i = 0; i < info->ants /*+ 2*/ + 3; i++)
 	{
 		temp_ant = ants_top;
 		while (temp_ant)
@@ -208,6 +213,7 @@ void	operate(t_info *info)
 	//print_two_dim(info->graph_top);
 	//printf("\n");
 	output_paths(info);
+	//printf("paths: %i\n\n", info->paths_n);
 	fucking_ants(info);
 	//free(shortest);
 }
