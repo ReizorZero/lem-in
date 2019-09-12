@@ -2,7 +2,6 @@
 
 void add_line(t_info *info, char *s)
 {
-	//printf("ADDED LINE: %s\n", s);
 	if (!info->input)
 	{
 		info->input = new_input(s);
@@ -41,7 +40,6 @@ void	check_ants_n(char *s, t_info *info)
 		i++;
 	}
 	info->ants = ft_atoi(s);
-	//printf("%s\n", s);
 	add_line(info, s);
 	free(s);
 	if (info->ants <= 0)
@@ -99,7 +97,6 @@ int	check_room(char *s, t_info *info, char flag)
 				ERROR_EXIT;
 			i++;
 		}
-		//printf("[%s] [%s] [%s] is a room\n", arr[0], arr[1], arr[2]);
 		if (!info->graph)
 		{
 			info->graph = new_room(arr[0], ft_atoi(arr[1]), ft_atoi(arr[2]));
@@ -115,19 +112,14 @@ int	check_room(char *s, t_info *info, char flag)
 		{
 			info->start = info->graph;
 			info->s_rooms++;
-			//printf("%s\n", s);
 			add_line(info, s);
 		}
 		if (flag == 'e')
 		{
 			info->end = info->graph;
 			info->e_rooms++;
-			//printf("%s\n", s);
 			add_line(info, s);
 		}
-		//free(*arr);
-		//free(arr);
-		free(arr[0]); free(arr[1]); free(arr[2]); free(arr); //free(*arr);
         return (1);
 	}
     return (0);
@@ -214,7 +206,6 @@ int	check_connection(char *s, t_info *info)
 		arr = ft_strsplit(s, '-');
 		if (!arr[1] || arr[2])
 			ERROR_EXIT;
-		//printf("\t[%s]-[%s] is a connection\n", arr[0], arr[1]);
 		connection_exists(info, arr[0], arr[1]);
 		temp = info->graph_top;
 		while (temp)
@@ -235,9 +226,8 @@ int	check_connection(char *s, t_info *info)
 			}
 			temp = temp->next;
 		}
-		if (!room_found)//no corresponding room to this connection
+		if (!room_found)
 			ERROR_EXIT;
-		//we repeat it to create reverse edge
 		room_found = 0;
 		temp = info->graph_top;
 		while (temp)
@@ -258,10 +248,8 @@ int	check_connection(char *s, t_info *info)
 			}
 			temp = temp->next;
 		}
-		if (!room_found)//no corresponding room to this connection
+		if (!room_found)
 			ERROR_EXIT;
-		//ERROR_EXIT;//no such room exists in the graph
-		free(arr[0]); free(arr[1]); free(arr); //free(*arr);
         info->sorry = 'c';
         return (1);
 	}
@@ -307,7 +295,6 @@ int	check_first_comment(char *s, t_info *info)
 	{
 		if (!ft_strcmp(s, "##start") || !ft_strcmp(s, "##end"))
 			ERROR_EXIT;
-		//printf("%s\n", s);
 		add_line(info, s);
 		free(s);
 	}
@@ -324,19 +311,14 @@ int		map(t_info *info)
 	char *s;
 
 	s = NULL;
-	//info->input = (t_input*)malloc(sizeof(t_input));
-	//if (!info->input)//hueta, but let it be, I don't fucking care
-	//	ERROR_EXIT;
 	while (check_first_comment(s, info))
 		;
 	while (get_next_line(0, &s) > 0)
 	{
-		//printf("%s\n", s);
 		add_line(info, s);
 		check_line(s, info);
 		free(s);
 	}
-	//printf("\n");
 	connect_origins(info);
 	return (1);
 }

@@ -6,7 +6,6 @@ void	bfs(t_info *info)
 	t_qlist *qlist_top;
 	t_room *temp_adj;
 
-	//let's make the stuff void just for fun
 	t_room *qwerty;
 	qwerty = info->graph_top;
 	while (qwerty)
@@ -14,31 +13,32 @@ void	bfs(t_info *info)
 		qwerty->c_from = NULL;
 		qwerty = qwerty->next;
 	}
-	qlist = new_qlist(info->start);//add first element to qlist -- start node
-	qlist_top = qlist;//save the top element of qlist
+	qlist = new_qlist(info->start);
+	qlist_top = qlist;
 	while (qlist_top)
 	{
 		if (qlist_top->actual == info->start)
 		{
-			temp_adj = qlist_top->actual->adj_top;//go to adj nodes
+			temp_adj = qlist_top->actual->adj_top;
 			qlist_top->actual->is_empty = 0;
 		}
 		else
 			temp_adj = qlist_top->actual->adj_origin->adj_top;
-		while (temp_adj)//while adj nodes exist
+		while (temp_adj)
 		{
-			if (temp_adj->adj_origin->is_empty == 1)//if the node is not visited
+			if (temp_adj->adj_origin->is_empty == 1)
 			{
-				qlist->next = new_qlist(temp_adj);//add this node to qlist
-				qlist = qlist->next; //go to next element/make last added element current one
-				temp_adj->adj_origin->is_empty = 0;//mark the room as visited
-				temp_adj->adj_origin->c_from = qlist_top->actual;//write where we come from
+				qlist->next = new_qlist(temp_adj);
+				qlist = qlist->next;
+				temp_adj->adj_origin->is_empty = 0;
+				temp_adj->adj_origin->c_from = qlist_top->actual;
 			}
-			temp_adj = temp_adj->next;//go to next adj node
+			temp_adj = temp_adj->next;
 		}
-		qlist_top = qlist_top->next;//go to next element of our qlist, to write its adj nodes
+		qlist_top = qlist_top->next;
 	}
-	//==========MAKE ALL ROOMS UNVISITED AGAIN
+
+	//==========MAKE A SEPARATE FUNCTION
 	t_room *unvisit;
 	unvisit = info->graph_top;
 	while (unvisit)
@@ -48,11 +48,6 @@ void	bfs(t_info *info)
 		unvisit->is_empty = 1;
 		unvisit = unvisit->next;
 	}
-	free(qlist);
-	//DO NOT CHANGE LEAKS AMOUNT
-	//free(qlist_top);
-	//free(temp_adj);
-	//free(unvisit);
 }
 
 void	remove_connection(t_room *from, char *to)
@@ -65,15 +60,9 @@ void	remove_connection(t_room *from, char *to)
 		while (temp_adj)
 		{
 			if (!ft_strcmp(temp_adj->name, to))
-			{
-				//from->adj_origin->adj_top->c_from = NULL;
 				from->adj_origin->adj_top = from->adj_origin->adj_top->next;
-			}
 			else if (temp_adj->next && !ft_strcmp(temp_adj->next->name, to))
-			{
-				//temp_adj->next->c_from = NULL;
 				temp_adj->next = temp_adj->next->next;
-			}
 			temp_adj = temp_adj->next;
 		}
 	}
@@ -83,19 +72,12 @@ void	remove_connection(t_room *from, char *to)
 		while (temp_adj)
 		{
 			if (!ft_strcmp(temp_adj->name, to))
-			{
-				//from->adj_top->c_from = NULL;
 				from->adj_top = from->adj_top->next;
-			}
 			else if (temp_adj->next && !ft_strcmp(temp_adj->next->name, to))
-			{
-				//temp_adj->next->c_from = NULL;
 				temp_adj->next = temp_adj->next->next;
-			}
 			temp_adj = temp_adj->next;
 		}
 	}
-	//free(temp_adj);
 }
 
 t_path	*shortest_path(t_info *info)
@@ -108,15 +90,8 @@ t_path	*shortest_path(t_info *info)
 
 	path_len = 0;
 	way = info->end;
-	// if (info->end->c_from)
-	// 	printf("end->c_f: %s\n", info->end->c_from->name);
-	// else
 	if (!info->end->c_from)
-	{
-		//printf("end->c_f: NULLLLL\n");
 		return (NULL);
-		//ERROR_EXIT;
-	}
 	shortest = new_path(way);
 	while (way)
 	{
@@ -145,7 +120,6 @@ t_path	*shortest_path(t_info *info)
 			remove_connection(shortest->prev->actual, shortest->actual->name);
 			//printf(" [ removed connection: %s-%s ] ", shortest->prev->actual->name, shortest->actual->name);
 		}
-		//remove_connection(shortest->prev->actual, shortest->actual->name);
 		path_len++;
 		shortest = shortest->prev;
 	}
@@ -157,10 +131,5 @@ t_path	*shortest_path(t_info *info)
 	// info->graph_top->next->next->c_from = NULL;
 	//printf("\n");
 	//printf("\n");
-
-	//free(way);
-	//free(shortest);
-	//free(shortest_top);
-	//free(head);
 	return (shortest_top);
 }

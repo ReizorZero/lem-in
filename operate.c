@@ -131,10 +131,6 @@ void	fucking_ants(t_info *info)
 		//}
 	}
 	free(ants);
-	//free(ants_top);//GAVE ME SEGV SOMEHOW
-	//DO NOT CHANGE LEAKS AMOUNT
-	//free(temp_ant);
-	//free(temp_paths);
 }
 
 
@@ -155,8 +151,6 @@ int	pathscmp(t_path *path1, t_path *path2)
 		p2 = p2->prev;
 	}
 	return (0);
-	//free(p1);
-	//free(p2);
 }
 
 void	operate(t_info *info)
@@ -170,17 +164,10 @@ void	operate(t_info *info)
 	if (info->s_rooms != 1 || info->e_rooms != 1)
 		ERROR_EXIT;
 	while (info->start->adj_top)
-	//for (int i = 0; i < 2; i++)
 	{
-		// printf("BEFORE BFS:\n");
-		// print_two_dim(info->graph_top);
-		// printf("\n");
 		bfs(info);
-		// printf("AFTER BFS:\n");
-		// print_two_dim(info->graph_top);
-		//printf("\n");
-		shortest = shortest_path(info);//<-----SEGV IS HERE
-		if (!shortest)//didn't find a way, so stop the BFS
+		shortest = shortest_path(info);
+		if (!shortest)
 		{
 			info->start->adj_top = NULL;
 			break ;
@@ -206,14 +193,8 @@ void	operate(t_info *info)
 			//info->graph_top->next->next->c_from = NULL;
 		if (!info->paths_top)
 			info->paths_top = info->paths;
-		//printf("AFTER BFS:\n");
-		//print_two_dim(info->graph_top);
-		//printf("\n");
 	}
-	//print_two_dim(info->graph_top);
-	//printf("\n");
 	output_paths(info);
 	//printf("paths: %i\n\n", info->paths_n);
 	fucking_ants(info);
-	//free(shortest);
 }
