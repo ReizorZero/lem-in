@@ -84,7 +84,7 @@ void	remove_connection(t_room *from, char *to)
 	}
 }
 
-t_path	*shortest_path(t_info *info)
+t_path	*shortest_path(t_info *info, int *shortest_len)
 {
 	t_room *way;
 	t_path *shortest;
@@ -116,7 +116,8 @@ t_path	*shortest_path(t_info *info)
 		// else if (shortest->actual->adj_origin)
 		// 	printf("%s[cf: %s] -> ", shortest->actual->name, shortest->actual->adj_origin->c_from->name);
 		// else
-		printf("%s -> ", shortest->actual->name);
+		
+		//printf("%s -> ", shortest->actual->name);
 		if (shortest->prev)
 		{
 			remove_connection(shortest->actual, shortest->prev->actual->name);
@@ -128,13 +129,14 @@ t_path	*shortest_path(t_info *info)
 		shortest = shortest->prev;
 	}
 	//printf(" | l=%i", path_len - 1);
+	*shortest_len = path_len - 1;
 	if (info->max_path_len < path_len - 1)
 		info->max_path_len = path_len - 1;
 	// printf("|| %s ||", info->graph_top->next->next->name);
 	// if (info->graph_top->next->next->c_from)
 	// info->graph_top->next->next->c_from = NULL;
 	
-	printf("\n");
-	printf("\n");
+	//printf("\n");
+	//printf("\n");
 	return (shortest_top);
 }

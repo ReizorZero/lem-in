@@ -14,10 +14,80 @@ void	output_paths(t_info *info)//FOR SOME REASONS IT CAN'T BE REMOVED
 			//printf("%s ~~> ", temp_aside->actual->name);
 			temp_aside = temp_aside->prev;
 		}
-		//printf("\n");
+		// printf(" | len = %i", temp->path_len);
+		// printf("\n");
+		// printf("\n");
 		temp = temp->next;
 	}
 	//printf("\n");
+}
+
+int	pathscmp(t_path *path1, t_path *path2)
+{
+	t_path *p1;
+	t_path *p2;
+
+	p1 = path1->head;
+	p2 = path2->head;
+	while (p1 || p2)
+	{
+		if ((p1 && !p2) || (!p1 && p2))
+			return (1);
+		if (ft_strcmp(p1->actual->name, p2->actual->name))
+			return (1);
+		p1 = p1->prev;
+		p2 = p2->prev;
+	}
+	return (0);
+}
+
+void	distinct_paths(t_info *info)
+{
+	t_path_list *temp_pl;
+	t_path_list *inn_temp_pl;
+	t_path *temp;
+	t_path *inn_temp;
+
+	temp_pl = info->paths_top;
+	while (temp_pl)//we go through all the paths in the list of found paths
+	{
+		temp = temp_pl->actual_path->head;
+		while (temp)//we go through each room of a current path
+		{
+			inn_temp_pl = info->paths_top;
+			while (inn_temp_pl)//we check occurence of current room in each path
+			{
+				inn_temp = inn_temp_pl->actual_path->head;
+				while (inn_temp)//we finally compare current room with an actual room of current path
+				{
+					if (!ft_strcmp(temp->actual->name, inn_temp->actual->name))// &&
+					//ft_strcmp(temp->actual->name, info->end->name))//rooms are same, excluding end-room
+					{
+						printf("WE NOTICED A DUPLICATION, SIR! LEN_1: %i, LEN_2: %i ", temp_pl->path_len,
+						inn_temp_pl->path_len);
+						printf("@ ROOM: %s ", temp->actual->name);
+						if (!pathscmp(temp_pl->actual_path, inn_temp_pl->actual_path) &&
+						temp_pl->path_len == inn_temp_pl->path_len)
+						{
+							printf("<-- SAME ONE PATH");
+						}
+						if (!ft_strcmp(temp->actual->name, info->end->name) &&
+						!ft_strcmp(info->end->name, inn_temp->actual->name))
+						{
+							printf("+++ THIS IS THE END");
+						}
+						printf("\n");
+					}
+					inn_temp = inn_temp->next;
+					//inn_temp = inn_temp->prev;
+				}
+				inn_temp_pl = inn_temp_pl->next;
+			}
+			temp = temp->next;
+			//temp = temp->prev;
+		}
+		temp_pl = temp_pl->next;
+	}
 }
 
 t_ant *new_ant(int index)
@@ -134,29 +204,31 @@ void	fucking_ants(t_info *info)
 }
 
 
-int	pathscmp(t_path *path1, t_path *path2)
-{
-	t_path *p1;
-	t_path *p2;
+// int	pathscmp(t_path *path1, t_path *path2)
+// {
+// 	t_path *p1;
+// 	t_path *p2;
 
-	p1 = path1->head;
-	p2 = path2->head;
-	while (p1 || p2)
-	{
-		if ((p1 && !p2) || (!p1 && p2))
-			return (1);
-		if (ft_strcmp(p1->actual->name, p2->actual->name))
-			return (1);
-		p1 = p1->prev;
-		p2 = p2->prev;
-	}
-	return (0);
-}
+// 	p1 = path1->head;
+// 	p2 = path2->head;
+// 	while (p1 || p2)
+// 	{
+// 		if ((p1 && !p2) || (!p1 && p2))
+// 			return (1);
+// 		if (ft_strcmp(p1->actual->name, p2->actual->name))
+// 			return (1);
+// 		p1 = p1->prev;
+// 		p2 = p2->prev;
+// 	}
+// 	return (0);
+// }
 
 void	operate(t_info *info)
 {
 	t_path *shortest;
+	int shortest_len;
 
+	shortest_len = 0;
 	if (!info->start || !info->end)
 		ERROR_EXIT;
 	if (!info->start->adj_top || !info->end->adj_top)
@@ -166,7 +238,7 @@ void	operate(t_info *info)
 	while (info->start->adj_top)
 	{
 		bfs(info);
-		shortest = shortest_path(info);
+		shortest = shortest_path(info, &shortest_len);
 		if (!shortest)
 		{
 			info->start->adj_top = NULL;
@@ -175,6 +247,7 @@ void	operate(t_info *info)
 		if (!info->paths)
 		{
 			info->paths = new_path_list(shortest);
+			info->paths->path_len = shortest_len;
 			info->paths_n++;
 		}
 		else
@@ -182,6 +255,7 @@ void	operate(t_info *info)
 			if (pathscmp(info->paths->actual_path, shortest))
 			{
 				info->paths->next = new_path_list(shortest);
+				info->paths->next->path_len = shortest_len;
 				info->paths = info->paths->next;
 				info->paths_n++;
 			}
@@ -194,6 +268,8 @@ void	operate(t_info *info)
 		if (!info->paths_top)
 			info->paths_top = info->paths;
 	}
+	//HERE IS WHERE WE WILL REMOVE PATHS WITH SAME ROOMS: FROM TWO PATHS WITH SAME ROOMS, WE KEEP SHORTER ONE
+	distinct_paths(info);
 	output_paths(info);
 	//printf("paths: %i\n\n", info->paths_n);
 	//fucking_ants(info);

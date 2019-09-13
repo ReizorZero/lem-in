@@ -40,7 +40,6 @@ t_path *new_path(t_room *room)
 	path->actual = room;
 	path->next = NULL;
 	path->prev = NULL;
-	//path->path_len = 0;
 	path->head = NULL;
 	return (path);
 }
@@ -54,6 +53,7 @@ t_path_list *new_path_list(t_path *path)
 		return (NULL);
 	path_list->next = NULL;
 	path_list->actual_path = path;
+	path_list->path_len = 0;
 	return (path_list);
 }
 

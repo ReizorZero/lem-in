@@ -36,6 +36,7 @@ typedef struct	s_path_list
 {
 	struct s_path_list	*next;
 	t_path 				*actual_path;
+	int					path_len;
 	//int			ant_index;
 }				t_path_list;
 
@@ -88,7 +89,7 @@ t_path		*new_path(t_room *room);
 t_path_list *new_path_list(t_path *path);
 void		operate(t_info *info);
 void		bfs(t_info *info);
-t_path		*shortest_path(t_info *info);
+t_path	*shortest_path(t_info *info, int *shortest_len);
 
 void	print_two_dim(t_room *dat);//REMOVE THEN
 
