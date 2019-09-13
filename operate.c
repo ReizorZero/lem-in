@@ -196,5 +196,5 @@ void	operate(t_info *info)
 	}
 	output_paths(info);
 	//printf("paths: %i\n\n", info->paths_n);
-	fucking_ants(info);
+	//fucking_ants(info);
 }

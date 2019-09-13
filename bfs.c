@@ -116,7 +116,7 @@ t_path	*shortest_path(t_info *info)
 		// else if (shortest->actual->adj_origin)
 		// 	printf("%s[cf: %s] -> ", shortest->actual->name, shortest->actual->adj_origin->c_from->name);
 		// else
-		//printf("%s -> ", shortest->actual->name);
+		printf("%s -> ", shortest->actual->name);
 		if (shortest->prev)
 		{
 			remove_connection(shortest->actual, shortest->prev->actual->name);
@@ -133,7 +133,8 @@ t_path	*shortest_path(t_info *info)
 	// printf("|| %s ||", info->graph_top->next->next->name);
 	// if (info->graph_top->next->next->c_from)
 	// info->graph_top->next->next->c_from = NULL;
-	//printf("\n");
-	//printf("\n");
+	
+	printf("\n");
+	printf("\n");
 	return (shortest_top);
 }
