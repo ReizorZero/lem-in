@@ -60,8 +60,75 @@ void	distinct_paths(t_info *info)
 				inn_temp = inn_temp_pl->actual_path->head;
 				while (inn_temp)//we finally compare current room with an actual room of current path
 				{
-					if (!ft_strcmp(temp->actual->name, inn_temp->actual->name))// &&
-					//ft_strcmp(temp->actual->name, info->end->name))//rooms are same, excluding end-room
+					//if (!ft_strcmp(temp->actual->name, inn_temp->actual->name))
+					
+					//if (!ft_strcmp(temp->actual->name, inn_temp->actual->name) &&
+					//ft_strcmp(temp->actual->name, info->start->name))//rooms are same, excluding end-room
+
+					if (!ft_strcmp(temp->actual->name, inn_temp->actual->name))
+					{
+						// printf("WE NOTICED A DUPLICATION, SIR! LEN_1: %i, LEN_2: %i ", temp_pl->path_len,
+						// inn_temp_pl->path_len);
+						// printf("@ ROOM: %s ", temp->actual->name);
+						if (!pathscmp(temp_pl->actual_path, inn_temp_pl->actual_path) &&
+						temp_pl->path_len == inn_temp_pl->path_len)
+						{
+							//printf("<-- SAME ONE PATH");
+						}
+						else if (!ft_strcmp(temp->actual->name, info->end->name) &&
+						!ft_strcmp(info->end->name, inn_temp->actual->name))
+						{
+							//printf("+++ THIS IS THE END");
+						}
+						else if (!ft_strcmp(temp->actual->name, info->start->name) &&
+						!ft_strcmp(info->start->name, inn_temp->actual->name))
+						{
+							//printf("=== THIS IS THE START");
+						}
+						else
+						{
+							printf("WE NOTICED A DUPLICATION, SIR! LEN_1: %i, LEN_2: %i ", temp_pl->path_len,
+						inn_temp_pl->path_len);
+							printf("@ ROOM: %s \n", temp->actual->name);
+						}
+					}
+					//inn_temp = inn_temp->next;
+					inn_temp = inn_temp->prev;
+				}
+				inn_temp_pl = inn_temp_pl->next;
+			}
+			//temp = temp->next;
+			temp = temp->prev;
+		}
+		temp_pl = temp_pl->next;
+	}
+}
+
+void	distinct_paths_oldver(t_info *info)
+{
+	t_path_list *temp_pl;
+	t_path_list *inn_temp_pl;
+	t_path *temp;
+	t_path *inn_temp;
+
+	temp_pl = info->paths_top;
+	while (temp_pl)//we go through all the paths in the list of found paths
+	{
+		temp = temp_pl->actual_path->head;
+		while (temp)//we go through each room of a current path
+		{
+			inn_temp_pl = info->paths_top;
+			while (inn_temp_pl)//we check occurence of current room in each path
+			{
+				inn_temp = inn_temp_pl->actual_path->head;
+				while (inn_temp)//we finally compare current room with an actual room of current path
+				{
+					//if (!ft_strcmp(temp->actual->name, inn_temp->actual->name))
+					
+					//if (!ft_strcmp(temp->actual->name, inn_temp->actual->name) &&
+					//ft_strcmp(temp->actual->name, info->start->name))//rooms are same, excluding end-room
+
+					if (!ft_strcmp(temp->actual->name, inn_temp->actual->name))
 					{
 						printf("WE NOTICED A DUPLICATION, SIR! LEN_1: %i, LEN_2: %i ", temp_pl->path_len,
 						inn_temp_pl->path_len);
@@ -76,15 +143,20 @@ void	distinct_paths(t_info *info)
 						{
 							printf("+++ THIS IS THE END");
 						}
+						if (!ft_strcmp(temp->actual->name, info->start->name) &&
+						!ft_strcmp(info->start->name, inn_temp->actual->name))
+						{
+							printf("=== THIS IS THE START");
+						}
 						printf("\n");
 					}
-					inn_temp = inn_temp->next;
-					//inn_temp = inn_temp->prev;
+					//inn_temp = inn_temp->next;
+					inn_temp = inn_temp->prev;
 				}
 				inn_temp_pl = inn_temp_pl->next;
 			}
-			temp = temp->next;
-			//temp = temp->prev;
+			//temp = temp->next;
+			temp = temp->prev;
 		}
 		temp_pl = temp_pl->next;
 	}
