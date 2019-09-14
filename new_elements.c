@@ -54,6 +54,7 @@ t_path_list *new_path_list(t_path *path)
 	path_list->next = NULL;
 	path_list->actual_path = path;
 	path_list->path_len = 0;
+	path_list->id = 0;
 	return (path_list);
 }
 

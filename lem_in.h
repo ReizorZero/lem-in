@@ -37,6 +37,7 @@ typedef struct	s_path_list
 	struct s_path_list	*next;
 	t_path 				*actual_path;
 	int					path_len;
+	int					id;
 	//int			ant_index;
 }				t_path_list;
 

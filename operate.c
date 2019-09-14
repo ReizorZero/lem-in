@@ -11,12 +11,17 @@ void	output_paths(t_info *info)//FOR SOME REASONS IT CAN'T BE REMOVED
 		temp_aside = temp->actual_path;
 		while (temp_aside)
 		{
-			//printf("%s ~~> ", temp_aside->actual->name);
+			printf("%s ~~> ", temp_aside->actual->name);
 			temp_aside = temp_aside->prev;
 		}
-		// printf(" | len = %i", temp->path_len);
-		// printf("\n");
-		// printf("\n");
+		//printf(" | id = %i | len = %i\n", temp->id, temp->path_len);
+
+		printf(" | id = %i | len = %i\n\n", temp->id, temp->path_len);
+		
+		//printf(" | id = %i\n\n", temp->id);
+		//printf(" | len = %i", temp->path_len);
+		//printf("\n");
+		//printf("\n");
 		temp = temp->next;
 	}
 	//printf("\n");
@@ -41,6 +46,93 @@ int	pathscmp(t_path *path1, t_path *path2)
 	return (0);
 }
 
+int remove_path_id(t_info *info, int id)
+//void remove_path_id(t_info *info, int id)//HANDLE ERROR WITH ID, THAT DOES NOT EXIST IN LIST
+{
+	//id--;
+	t_path_list *temp;
+
+	temp = info->paths_top;
+	while (temp)
+	{
+		if (temp == info->paths_top && temp->id == id)//head of the list
+		{
+			//printf("\tI AM SO DONE, CHARLES! (THIS IS HEAD)[ID = %i] LEN = %i\n", id, info->paths_top->path_len);
+			info->paths_top = info->paths_top->next;//AND CLEAN THE FUCKING LEAKS, SON!
+			//break ;
+			return (1);
+		}
+		// else if (temp->next && temp->id == id)
+		// {
+		// 	printf("\tI AM SO DONE, CHARLES! [ID = %i] LEN = %i\n", id, temp->path_len);
+		// 	//temp->next = temp->next->next;//CLEAN THE FUCKING LEAKS HERE AS WELL, SON!
+		// 	temp = temp->next->next;//CLEAN THE FUCKING LEAKS HERE AS WELL, SON!
+		// 	//break ;
+		// 	return (1);
+		// }
+		else if (temp->next && temp->next->id == id)
+		{
+			//printf("\tI AM SO DONE, CHARLES! [ID = %i] LEN = %i\n", id, temp->next->path_len);
+			//temp->next = temp->next->next;//CLEAN THE FUCKING LEAKS HERE AS WELL, SON!
+			temp->next = temp->next->next;//CLEAN THE FUCKING LEAKS HERE AS WELL, SON!
+			//break ;
+			return (1);
+		}
+		temp = temp->next;
+	}
+	return (1);
+}
+
+void	distinct_rooms(t_info *info)
+{
+	t_room *temp_room;
+	t_path_list *temp_pl;
+	t_path *temp_path;
+	t_path_list *last_path;
+	int occ;
+
+	temp_room = info->graph_top;
+	while (temp_room)//we go through all the rooms
+	{
+		occ = 0;
+		temp_pl = info->paths_top;
+		last_path = NULL;
+		while (temp_pl)//we go through all the paths
+		{
+			temp_path = temp_pl->actual_path->head;
+			while (temp_path)//we go through all the rooms in this path
+			{
+				if (!ft_strcmp(temp_room->name, temp_path->actual->name)
+				&& ft_strcmp(temp_room->name, info->start->name)
+				&& ft_strcmp(temp_room->name, info->end->name))
+				{
+					if (!last_path)
+					last_path = temp_pl;//we mark the path, if it has the room - it's first occurance (once)
+					else
+					{
+						// printf ("from [%i-%i] and [%i-%i] we choose --> ", 
+						// temp_pl->path_len, temp_pl->id, last_path->path_len, last_path->id);
+						// (temp_pl->path_len <= last_path->path_len) ? 
+						// printf("%i, id: %i\n", temp_pl->path_len, temp_pl->id) :
+						// printf("%i, id: %i\n", last_path->path_len, last_path->id);
+						(temp_pl->path_len >= last_path->path_len) ? remove_path_id(info, temp_pl->id) :
+						remove_path_id(info, last_path->id);
+					}
+					occ++;
+				}
+				temp_path = temp_path->prev;
+			}
+			temp_pl = temp_pl->next;
+		}
+		if (occ > 1)
+		{
+			//printf("ROOM [%s] IS DUPLICATED [%i] TIMES\n", temp_room->name, occ);
+		}
+		temp_room = temp_room->next;
+	}
+	//printf("\n");
+}
+
 void	distinct_paths(t_info *info)
 {
 	t_path_list *temp_pl;
@@ -52,6 +144,10 @@ void	distinct_paths(t_info *info)
 	while (temp_pl)//we go through all the paths in the list of found paths
 	{
 		temp = temp_pl->actual_path->head;
+		//SEPARATE THIS PART AS A DISTINCTIVE FUNCTION AND EXECUTE IN A LOOP UNTILL ALL THE PATHS ARE CHECKED
+		////CHECKED PATH IS MARKED AT ITS INNER FIELD AS DISTINCTIVE-VISITED (OPERATED WITH THIS FUNCTION)
+		////AND EACH TIME WE REMOVE A PATH, WE RE-EXECUTE THE FUNCTION, STARTING FROM THE VERY BEGINNING OF THE PATHS LIST
+		////THEREFORE WE DON'T MISS ANY PATH AND DO NOT COME ACROSS ALREADY DELETED PATHS
 		while (temp)//we go through each room of a current path
 		{
 			inn_temp_pl = info->paths_top;
@@ -87,9 +183,20 @@ void	distinct_paths(t_info *info)
 						}
 						else
 						{
-							printf("WE NOTICED A DUPLICATION, SIR! LEN_1: %i, LEN_2: %i ", temp_pl->path_len,
-						inn_temp_pl->path_len);
-							printf("@ ROOM: %s \n", temp->actual->name);
+							printf("WE NOTICED A DUPLICATION, SIR! LEN_1: %i, LEN_2: %i, ID_1: %i, ID_2: %i ",
+							temp_pl->path_len,
+						inn_temp_pl->path_len, temp_pl->id, inn_temp_pl->id);
+							printf("@ ROOM: %s ", temp->actual->name);
+							//printf("\n");
+							printf("<==== WE PRESERVE PATH: ");
+							(temp_pl->path_len <= inn_temp_pl->path_len) ? printf("%i\n", temp_pl->path_len) :
+							printf("%i\n", inn_temp_pl->path_len);
+
+							//(temp_pl->path_len <= inn_temp_pl->path_len) ? printf("%i\n", temp_pl->id) :
+							//printf("%i\n", inn_temp_pl->id);
+							(temp_pl->path_len >= inn_temp_pl->path_len) ? remove_path_id(info, temp_pl->id) :
+							remove_path_id(info, inn_temp_pl->id);
+							//ERROR_EXIT;
 						}
 					}
 					//inn_temp = inn_temp->next;
@@ -321,6 +428,7 @@ void	operate(t_info *info)
 			info->paths = new_path_list(shortest);
 			info->paths->path_len = shortest_len;
 			info->paths_n++;
+			info->paths->id = info->paths_n;
 		}
 		else
 		{
@@ -330,6 +438,7 @@ void	operate(t_info *info)
 				info->paths->next->path_len = shortest_len;
 				info->paths = info->paths->next;
 				info->paths_n++;
+				info->paths->id = info->paths_n;
 			}
 			else
 				break ;
@@ -341,7 +450,12 @@ void	operate(t_info *info)
 			info->paths_top = info->paths;
 	}
 	//HERE IS WHERE WE WILL REMOVE PATHS WITH SAME ROOMS: FROM TWO PATHS WITH SAME ROOMS, WE KEEP SHORTER ONE
-	distinct_paths(info);
+	//distinct_paths(info);
+	//distinct_rooms(info);
+	//output_paths(info);
+	distinct_rooms(info);
+	//remove_path_id(info, 16);
+	//printf("===============================================================================\n\n");
 	output_paths(info);
 	//printf("paths: %i\n\n", info->paths_n);
 	//fucking_ants(info);
