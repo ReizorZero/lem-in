@@ -46,8 +46,33 @@ int	pathscmp(t_path *path1, t_path *path2)
 	return (0);
 }
 
+int remove_ant_index(t_ant *ants_top, int index, t_info *info)
+{
+	t_ant *temp;
+
+	temp = ants_top;
+	while (temp)
+	{
+		if (temp == ants_top && temp->index == index)//head of the list
+		{
+			//printf(" [DELETED ANT: %i] ", temp->index);
+			info->ants--;
+			ants_top = ants_top->next;//AND CLEAN THE FUCKING LEAKS, SON!
+			return (1);
+		}
+		else if (temp->next && temp->next->index == index)
+		{
+			//printf(" [DELETED ANT: %i] ", temp->index);
+			info->ants--;
+			temp->next = temp->next->next;//CLEAN THE FUCKING LEAKS HERE AS WELL, SON!
+			return (1);
+		}
+		temp = temp->next;
+	}
+	return (0);
+}
+
 int remove_path_id(t_info *info, int id)
-//void remove_path_id(t_info *info, int id)//HANDLE ERROR WITH ID, THAT DOES NOT EXIST IN LIST
 {
 	t_path_list *temp;
 
@@ -138,17 +163,21 @@ t_ant *new_ant(int index)
 	return (ant);
 }
 
-t_path *do_fucking_step(t_path *curr_path, t_info *info)
+
+t_path *do_fucking_step(t_ant *ant, t_info *info)
 {
-	//int x = info->ants; x++;
-	if (!curr_path->prev)
+	int x = info->ants; x++;
+	if (!ant->ant_path->prev)
 	{
 		//printf(" {{ants: %i}} ", info->ants);
-		info->ants--;
+		//printf(" [remove ant %i] ", ant->index);
+		//remove_ant_index(ant->index);
+		//info->ants--;
 	}
 	else
-		curr_path = curr_path->prev;
-	return (curr_path);
+		ant->ant_path = ant->ant_path->prev;
+	//printf(" {{ants: %i}} ", info->ants);
+	return (ant->ant_path);
 }
 
 void	fucking_ants(t_info *info)
@@ -206,32 +235,29 @@ void	fucking_ants(t_info *info)
 		temp_ant = temp_ant->next;
 	}
 	while (info->ants > 0)
-	//for (int i = 0; i < info->ants /*+ 2*/ + 3; i++)
 	{
 		temp_ant = ants_top;
 		while (temp_ant)
 		{
 			if (temp_ant->delay == 0)
-				temp_ant->ant_path = do_fucking_step(temp_ant->ant_path, info);
+				temp_ant->ant_path = do_fucking_step(temp_ant, info);
 			else
 				temp_ant->delay--;
-				if (temp_ant->ant_path->actual != info->end)
-				{
-					if (temp_ant->ant_path->actual != info->start)
-					printf("L%i-%s ", temp_ant->index, temp_ant->ant_path->actual->name);
-				}
-				else if (temp_ant->at_end == 0)
-				{
-					printf("L%i-%s ", temp_ant->index, temp_ant->ant_path->actual->name);
-					temp_ant->at_end = 1;
-				}
+			
+			if (temp_ant->ant_path->actual != info->end)
+			{
+				if (temp_ant->ant_path->actual != info->start)
+				printf("L%i-%s ", temp_ant->index, temp_ant->ant_path->actual->name);
+			}
+			else if (temp_ant->at_end == 0)
+			{
+				printf("L%i-%s ", temp_ant->index, temp_ant->ant_path->actual->name);
+				temp_ant->at_end = 1;
+				remove_ant_index(ants_top, temp_ant->index, info);
+			}
 			temp_ant = temp_ant->next;
 		}
-		//printf(" [ants: %i] ", info->ants);
-		//if (info->ants >= -1)
-		//{
 			printf("\n");
-		//}
 	}
 	free(ants);
 }
@@ -283,14 +309,6 @@ void	operate(t_info *info)
 		if (!info->paths_top)
 			info->paths_top = info->paths;
 	}
-	//HERE IS WHERE WE WILL REMOVE PATHS WITH SAME ROOMS: FROM TWO PATHS WITH SAME ROOMS, WE KEEP SHORTER ONE
-	//distinct_paths(info);
-	//distinct_rooms(info);
-	//output_paths(info);
 	distinct_rooms(info);
-	//remove_path_id(info, 16);
-	//printf("===============================================================================\n\n");
-	//output_paths(info);
-	//printf("paths: %i\n\n", info->paths_n);
 	fucking_ants(info);
 }
