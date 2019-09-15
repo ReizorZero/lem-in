@@ -58,17 +58,19 @@ int remove_path_id(t_info *info, int id)
 		{
 			//printf("\tI AM SO DONE, CHARLES! (THIS IS HEAD)[ID = %i] LEN = %i\n", id, info->paths_top->path_len);
 			info->paths_top = info->paths_top->next;//AND CLEAN THE FUCKING LEAKS, SON!
+			info->paths_n--;
 			return (1);
 		}
 		else if (temp->next && temp->next->id == id)
 		{
 			//printf("\tI AM SO DONE, CHARLES! [ID = %i] LEN = %i\n", id, temp->next->path_len);
+			info->paths_n--;
 			temp->next = temp->next->next;//CLEAN THE FUCKING LEAKS HERE AS WELL, SON!
 			return (1);
 		}
 		temp = temp->next;
 	}
-	return (1);
+	return (0);
 }
 
 void	distinct_rooms(t_info *info)
@@ -288,7 +290,7 @@ void	operate(t_info *info)
 	distinct_rooms(info);
 	//remove_path_id(info, 16);
 	//printf("===============================================================================\n\n");
-	output_paths(info);
+	//output_paths(info);
 	//printf("paths: %i\n\n", info->paths_n);
-	//fucking_ants(info);
+	fucking_ants(info);
 }
