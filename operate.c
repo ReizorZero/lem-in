@@ -49,7 +49,6 @@ int	pathscmp(t_path *path1, t_path *path2)
 int remove_path_id(t_info *info, int id)
 //void remove_path_id(t_info *info, int id)//HANDLE ERROR WITH ID, THAT DOES NOT EXIST IN LIST
 {
-	//id--;
 	t_path_list *temp;
 
 	temp = info->paths_top;
@@ -59,23 +58,12 @@ int remove_path_id(t_info *info, int id)
 		{
 			//printf("\tI AM SO DONE, CHARLES! (THIS IS HEAD)[ID = %i] LEN = %i\n", id, info->paths_top->path_len);
 			info->paths_top = info->paths_top->next;//AND CLEAN THE FUCKING LEAKS, SON!
-			//break ;
 			return (1);
 		}
-		// else if (temp->next && temp->id == id)
-		// {
-		// 	printf("\tI AM SO DONE, CHARLES! [ID = %i] LEN = %i\n", id, temp->path_len);
-		// 	//temp->next = temp->next->next;//CLEAN THE FUCKING LEAKS HERE AS WELL, SON!
-		// 	temp = temp->next->next;//CLEAN THE FUCKING LEAKS HERE AS WELL, SON!
-		// 	//break ;
-		// 	return (1);
-		// }
 		else if (temp->next && temp->next->id == id)
 		{
 			//printf("\tI AM SO DONE, CHARLES! [ID = %i] LEN = %i\n", id, temp->next->path_len);
-			//temp->next = temp->next->next;//CLEAN THE FUCKING LEAKS HERE AS WELL, SON!
 			temp->next = temp->next->next;//CLEAN THE FUCKING LEAKS HERE AS WELL, SON!
-			//break ;
 			return (1);
 		}
 		temp = temp->next;
@@ -124,149 +112,13 @@ void	distinct_rooms(t_info *info)
 			}
 			temp_pl = temp_pl->next;
 		}
-		if (occ > 1)
-		{
-			//printf("ROOM [%s] IS DUPLICATED [%i] TIMES\n", temp_room->name, occ);
-		}
+		// if (occ > 1)
+		// {
+		// 	//printf("ROOM [%s] IS DUPLICATED [%i] TIMES\n", temp_room->name, occ);
+		// }
 		temp_room = temp_room->next;
 	}
 	//printf("\n");
-}
-
-void	distinct_paths(t_info *info)
-{
-	t_path_list *temp_pl;
-	t_path_list *inn_temp_pl;
-	t_path *temp;
-	t_path *inn_temp;
-
-	temp_pl = info->paths_top;
-	while (temp_pl)//we go through all the paths in the list of found paths
-	{
-		temp = temp_pl->actual_path->head;
-		//SEPARATE THIS PART AS A DISTINCTIVE FUNCTION AND EXECUTE IN A LOOP UNTILL ALL THE PATHS ARE CHECKED
-		////CHECKED PATH IS MARKED AT ITS INNER FIELD AS DISTINCTIVE-VISITED (OPERATED WITH THIS FUNCTION)
-		////AND EACH TIME WE REMOVE A PATH, WE RE-EXECUTE THE FUNCTION, STARTING FROM THE VERY BEGINNING OF THE PATHS LIST
-		////THEREFORE WE DON'T MISS ANY PATH AND DO NOT COME ACROSS ALREADY DELETED PATHS
-		while (temp)//we go through each room of a current path
-		{
-			inn_temp_pl = info->paths_top;
-			while (inn_temp_pl)//we check occurence of current room in each path
-			{
-				inn_temp = inn_temp_pl->actual_path->head;
-				while (inn_temp)//we finally compare current room with an actual room of current path
-				{
-					//if (!ft_strcmp(temp->actual->name, inn_temp->actual->name))
-					
-					//if (!ft_strcmp(temp->actual->name, inn_temp->actual->name) &&
-					//ft_strcmp(temp->actual->name, info->start->name))//rooms are same, excluding end-room
-
-					if (!ft_strcmp(temp->actual->name, inn_temp->actual->name))
-					{
-						// printf("WE NOTICED A DUPLICATION, SIR! LEN_1: %i, LEN_2: %i ", temp_pl->path_len,
-						// inn_temp_pl->path_len);
-						// printf("@ ROOM: %s ", temp->actual->name);
-						if (!pathscmp(temp_pl->actual_path, inn_temp_pl->actual_path) &&
-						temp_pl->path_len == inn_temp_pl->path_len)
-						{
-							//printf("<-- SAME ONE PATH");
-						}
-						else if (!ft_strcmp(temp->actual->name, info->end->name) &&
-						!ft_strcmp(info->end->name, inn_temp->actual->name))
-						{
-							//printf("+++ THIS IS THE END");
-						}
-						else if (!ft_strcmp(temp->actual->name, info->start->name) &&
-						!ft_strcmp(info->start->name, inn_temp->actual->name))
-						{
-							//printf("=== THIS IS THE START");
-						}
-						else
-						{
-							printf("WE NOTICED A DUPLICATION, SIR! LEN_1: %i, LEN_2: %i, ID_1: %i, ID_2: %i ",
-							temp_pl->path_len,
-						inn_temp_pl->path_len, temp_pl->id, inn_temp_pl->id);
-							printf("@ ROOM: %s ", temp->actual->name);
-							//printf("\n");
-							printf("<==== WE PRESERVE PATH: ");
-							(temp_pl->path_len <= inn_temp_pl->path_len) ? printf("%i\n", temp_pl->path_len) :
-							printf("%i\n", inn_temp_pl->path_len);
-
-							//(temp_pl->path_len <= inn_temp_pl->path_len) ? printf("%i\n", temp_pl->id) :
-							//printf("%i\n", inn_temp_pl->id);
-							(temp_pl->path_len >= inn_temp_pl->path_len) ? remove_path_id(info, temp_pl->id) :
-							remove_path_id(info, inn_temp_pl->id);
-							//ERROR_EXIT;
-						}
-					}
-					//inn_temp = inn_temp->next;
-					inn_temp = inn_temp->prev;
-				}
-				inn_temp_pl = inn_temp_pl->next;
-			}
-			//temp = temp->next;
-			temp = temp->prev;
-		}
-		temp_pl = temp_pl->next;
-	}
-}
-
-void	distinct_paths_oldver(t_info *info)
-{
-	t_path_list *temp_pl;
-	t_path_list *inn_temp_pl;
-	t_path *temp;
-	t_path *inn_temp;
-
-	temp_pl = info->paths_top;
-	while (temp_pl)//we go through all the paths in the list of found paths
-	{
-		temp = temp_pl->actual_path->head;
-		while (temp)//we go through each room of a current path
-		{
-			inn_temp_pl = info->paths_top;
-			while (inn_temp_pl)//we check occurence of current room in each path
-			{
-				inn_temp = inn_temp_pl->actual_path->head;
-				while (inn_temp)//we finally compare current room with an actual room of current path
-				{
-					//if (!ft_strcmp(temp->actual->name, inn_temp->actual->name))
-					
-					//if (!ft_strcmp(temp->actual->name, inn_temp->actual->name) &&
-					//ft_strcmp(temp->actual->name, info->start->name))//rooms are same, excluding end-room
-
-					if (!ft_strcmp(temp->actual->name, inn_temp->actual->name))
-					{
-						printf("WE NOTICED A DUPLICATION, SIR! LEN_1: %i, LEN_2: %i ", temp_pl->path_len,
-						inn_temp_pl->path_len);
-						printf("@ ROOM: %s ", temp->actual->name);
-						if (!pathscmp(temp_pl->actual_path, inn_temp_pl->actual_path) &&
-						temp_pl->path_len == inn_temp_pl->path_len)
-						{
-							printf("<-- SAME ONE PATH");
-						}
-						if (!ft_strcmp(temp->actual->name, info->end->name) &&
-						!ft_strcmp(info->end->name, inn_temp->actual->name))
-						{
-							printf("+++ THIS IS THE END");
-						}
-						if (!ft_strcmp(temp->actual->name, info->start->name) &&
-						!ft_strcmp(info->start->name, inn_temp->actual->name))
-						{
-							printf("=== THIS IS THE START");
-						}
-						printf("\n");
-					}
-					//inn_temp = inn_temp->next;
-					inn_temp = inn_temp->prev;
-				}
-				inn_temp_pl = inn_temp_pl->next;
-			}
-			//temp = temp->next;
-			temp = temp->prev;
-		}
-		temp_pl = temp_pl->next;
-	}
 }
 
 t_ant *new_ant(int index)
@@ -381,26 +233,6 @@ void	fucking_ants(t_info *info)
 	}
 	free(ants);
 }
-
-
-// int	pathscmp(t_path *path1, t_path *path2)
-// {
-// 	t_path *p1;
-// 	t_path *p2;
-
-// 	p1 = path1->head;
-// 	p2 = path2->head;
-// 	while (p1 || p2)
-// 	{
-// 		if ((p1 && !p2) || (!p1 && p2))
-// 			return (1);
-// 		if (ft_strcmp(p1->actual->name, p2->actual->name))
-// 			return (1);
-// 		p1 = p1->prev;
-// 		p2 = p2->prev;
-// 	}
-// 	return (0);
-// }
 
 void	operate(t_info *info)
 {
