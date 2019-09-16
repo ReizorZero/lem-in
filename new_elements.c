@@ -3,10 +3,27 @@
 t_room		*new_room(char *name, int x, int y)
 {
 	t_room *room;
+	//char *temp;
 
 	room = (t_room*)malloc(sizeof(t_room));
 	if (!room)
 		return (NULL);
+	//		BLYAD, POFIKSI ETO!!!!! 
+
+
+	// temp = room->name;
+	// room->name = ft_strdup(name);
+	// free(temp);//WHY THE FUCK Y NO WORK???
+	
+	//temp = ft_strdup(name);
+	// room->name = (char*)malloc(sizeof(char) * ft_strlen(name));
+	// ft_strcpy(room->name, name);
+	//temp = NULL;
+	// free(temp);//WHY THE FUCK Y NO WORK???
+
+	// room->name = (char*)malloc(sizeof(char) * ft_strlen(name));
+	// ft_strcpy(room->name, name);
+
 	room->name = ft_strdup(name);
 	room->next = NULL;
 	room->adj_room = NULL;
@@ -65,7 +82,8 @@ t_info *new_info(void)
 	info = (t_info*)malloc(sizeof(t_info));
 	if (!info)
 		ERROR_EXIT;
-	info->ants = 0;
+	//ft_bzero(info, sizeof(t_info));//uncomment this, and all next lines are not needed
+	info->ants_n = 0;
 	info->s_rooms = 0;
 	info->e_rooms = 0;
 	info->start = NULL;
@@ -79,6 +97,9 @@ t_info *new_info(void)
 	info->sorry = 0;
 	info->input = NULL;
 	info->input_top = NULL;
+	info->ants = NULL;
+	info->ants_top = NULL;
+	info->qlist_top = NULL;
 	return (info);
 }
 
@@ -92,4 +113,19 @@ t_input *new_input(char *str)
 	input->str = ft_strdup(str);//clear memory here should you do it
 	input->next = NULL;
 	return (input);
+}
+
+t_ant *new_ant(int index)
+{
+	t_ant *ant;
+
+	ant = (t_ant*)malloc(sizeof(t_ant));
+	if (!ant)
+		return (NULL);
+	ant->ant_path = NULL;
+	ant->index = index;
+	ant->delay = 0;
+	ant->at_end = 0;
+	ant->next = NULL;
+	return (ant);
 }

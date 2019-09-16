@@ -54,12 +54,13 @@ int		main(void)
 	if (map(info))
 	{
 		print_file(info);
-		//print_two_dim(info->graph_top);
-		//printf("\n");
-		operate(info);
+		operate(info);//<--LEEKS
+		//system("leaks -q lem-in");
 	}
 	else
 		ERROR_EXIT;
-	//system("leaks -q lem-in");
+	clear_all(&info);
+	free(info);
+	system("leaks -q lem-in");
 	return (0);
 }

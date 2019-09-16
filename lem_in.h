@@ -13,7 +13,7 @@ typedef struct	s_room
 {
 	char			*name;
 	struct s_room	*next;
-	struct s_room	*adj_room;
+	struct s_room	*adj_room;//MALLOC
 	struct s_room	*adj_top;
 	struct s_room	*c_from;
 	struct s_room	*adj_origin;
@@ -47,25 +47,6 @@ typedef struct	s_input
 	struct	s_input *next;
 }				t_input;
 
-typedef struct	s_info
-{
-	int		ants;
-	int		s_rooms;
-	int		e_rooms;
-	t_room	*start;
-	t_room	*end;
-	t_room	*graph;
-	t_room	*graph_top;
-	t_path_list	*paths;
-	t_path_list	*paths_top;
-	int			paths_n;
-	int			max_path_len;
-	char		sorry;
-	t_input		*input;
-	t_input		*input_top;
-	//t_path	*shortest_path;//for the case with one ant
-}				t_info;
-
 typedef struct	s_ant
 {
 	struct s_ant	*next;
@@ -81,16 +62,54 @@ typedef struct	s_qlist
 	t_room			*actual;
 }				t_qlist;
 
+typedef struct	s_info
+{
+	int		ants_n;
+	int		s_rooms;
+	int		e_rooms;
+	t_room	*start;
+	t_room	*end;
+	t_room	*graph;//del these
+	t_room	*graph_top;
+	t_path_list	*paths;//del these
+	t_path_list	*paths_top;
+	int			paths_n;
+	int			max_path_len;
+	char		sorry;
+	t_input		*input;//del these
+	t_input		*input_top;
+	//t_path	*shortest_path;//for the case with one ant
+	t_ant		*ants;//del these
+	t_ant		*ants_top;
+	t_qlist		*qlist_top;
+}				t_info;
+
 int			map(t_info *info);
+int	check_first_comment(char *s, t_info *info);
+void	connect_origins(t_info *info);
+void	check_line(char *s, t_info *info);
+int	check_connection(char *s, t_info *info);
+void connection_exists(t_info *info, char *room_1, char *room_2);
+void	check_dashes(char *s, t_info *info);
+int	check_room(char *s, t_info *info, char flag);
+int check_existing(t_info *info, char *room_name, int x, int y);
+void	check_ants_n(char *s, t_info *info);
+t_room	*find_origin(t_info *info, t_room *room);
+void add_line(t_info *info, char *s);
+
 t_info		*new_info(void);
 t_input		*new_input(char *str);
 t_room		*new_room(char *name, int x, int y);
 t_qlist		*new_qlist(t_room *room);
 t_path		*new_path(t_room *room);
 t_path_list *new_path_list(t_path *path);
+t_ant *new_ant(int index);
+
 void		operate(t_info *info);
 void		bfs(t_info *info);
 t_path	*shortest_path(t_info *info, int *shortest_len);
+void	clear_all(t_info **info);
+//void free_qlist(t_qlist **qlist_top);
 
 void	print_two_dim(t_room *dat);//REMOVE THEN
 

@@ -39,10 +39,10 @@ void	check_ants_n(char *s, t_info *info)
 			ERROR_EXIT;
 		i++;
 	}
-	info->ants = ft_atoi(s);
+	info->ants_n = ft_atoi(s);
 	add_line(info, s);
 	free(s);
-	if (info->ants <= 0)
+	if (info->ants_n <= 0)
 		ERROR_EXIT;
 }
 
@@ -62,77 +62,14 @@ int check_existing(t_info *info, char *room_name, int x, int y)
 	return (1);
 }
 
-int	check_room(char *s, t_info *info, char flag)
-{
-	char	**arr;
-	int i;
-	int spaces;
 
-	i = 0;
-	spaces = 0;
-	if (!ft_strchr(s, '-') && !(ft_strchr(s, '#')))
-	{
-		while (s[i] != '\0')
-		{
-			if (s[i] == ' ')
-				spaces++;
-			i++;
-		}
-		if (spaces > 2)
-			ERROR_EXIT;
-		arr = ft_strsplit(s, ' ');
-		if (!arr[1] || !arr[2] || arr[3] || arr[0][0] == 'L')
-			ERROR_EXIT;
-		i = 0;
-		while (arr[1][i] != '\0')
-		{
-			if (!ft_isdigit(arr[1][i]))
-				ERROR_EXIT;
-			i++;
-		}
-		i = 0;
-		while (arr[2][i] != '\0')
-		{
-			if (!ft_isdigit(arr[2][i]))
-				ERROR_EXIT;
-			i++;
-		}
-		if (!info->graph)
-		{
-			info->graph = new_room(arr[0], ft_atoi(arr[1]), ft_atoi(arr[2]));
-			info->graph_top = info->graph;
-		}
-		else
-		{
-			check_existing(info, arr[0], ft_atoi(arr[1]), ft_atoi(arr[2]));
-			info->graph->next = new_room(arr[0], ft_atoi(arr[1]), ft_atoi(arr[2]));
-			info->graph = info->graph->next;
-		}
-		if (flag == 's')
-		{
-			info->start = info->graph;
-			info->s_rooms++;
-			add_line(info, s);
-		}
-		if (flag == 'e')
-		{
-			info->end = info->graph;
-			info->e_rooms++;
-			add_line(info, s);
-		}
-        return (1);
-	}
-    return (0);
-}
-
-void	check_dashes(char *s, t_info *info)
+void	check_dashes(char *s, t_info *info)//REDUCE LENGTH HERE
 {
 	if (s[0] == '#')
 	{
 		if (!ft_strcmp(s, "##start"))
 		{
 			get_next_line(0, &s);
-			//add here another correction to any other cases
 			if (!ft_strcmp(s, "##start") || ft_strchr(s, '-'))
 				ERROR_EXIT;
 			while (s[0] == '#')
@@ -146,7 +83,6 @@ void	check_dashes(char *s, t_info *info)
 		else if (!ft_strcmp(s, "##end"))
 		{
 			get_next_line(0, &s);
-			//add here another correction to any other cases
 			if (!ft_strcmp(s, "##end") || ft_strchr(s, '-'))
 				ERROR_EXIT;
 			while (s[0] == '#')
@@ -180,80 +116,6 @@ void connection_exists(t_info *info, char *room_1, char *room_2)
 		}
 		temp = temp->next;
 	}
-}
-
-int	check_connection(char *s, t_info *info)
-{
-	int i;
-	char	**arr;
-	t_room	*temp;
-	int room_found;
-	int defis;
-
-	i = 0;
-	defis = 0;
-	room_found = 0;
-	if (ft_strchr(s, '-') && !(ft_strchr(s, '#')))// && !(ft_strchr(s, ' ')))
-	{
-		while (s[i] != '\0')
-		{
-			if (s[i] == '-')
-				defis++;
-			i++;
-		}
-		if (defis > 1)
-			ERROR_EXIT;
-		arr = ft_strsplit(s, '-');
-		if (!arr[1] || arr[2])
-			ERROR_EXIT;
-		connection_exists(info, arr[0], arr[1]);
-		temp = info->graph_top;
-		while (temp)
-		{
-			if (!ft_strcmp(arr[0], temp->name))
-			{
-				room_found = 1;
-				if (!temp->adj_room)
-				{
-					temp->adj_room = new_room(arr[1], 0, 0);
-					temp->adj_top = temp->adj_room;
-				}
-				else
-				{
-					temp->adj_room->next = new_room(arr[1], 0, 0);
-					temp->adj_room = temp->adj_room->next;
-				}
-			}
-			temp = temp->next;
-		}
-		if (!room_found)
-			ERROR_EXIT;
-		room_found = 0;
-		temp = info->graph_top;
-		while (temp)
-		{
-			if (!ft_strcmp(arr[1], temp->name))
-			{
-				room_found = 1;
-				if (!temp->adj_room)
-				{
-					temp->adj_room = new_room(arr[0], 0, 0);
-					temp->adj_top = temp->adj_room;
-				}
-				else
-				{
-					temp->adj_room->next = new_room(arr[0], 0, 0);
-					temp->adj_room = temp->adj_room->next;
-				}
-			}
-			temp = temp->next;
-		}
-		if (!room_found)
-			ERROR_EXIT;
-        info->sorry = 'c';
-        return (1);
-	}
-    return (0);
 }
 
 void	check_line(char *s, t_info *info)
@@ -320,5 +182,11 @@ int		map(t_info *info)
 		free(s);
 	}
 	connect_origins(info);
+	if (!info->start || !info->end)
+		ERROR_EXIT;
+	if (!info->start->adj_top || !info->end->adj_top)
+		ERROR_EXIT;
+	if (info->s_rooms != 1 || info->e_rooms != 1)
+		ERROR_EXIT;
 	return (1);
 }

@@ -7,20 +7,19 @@ void	unvisit_rooms(t_info *info)
 	unvisit = info->graph_top;
 	while (unvisit)
 	{
-		// if (unvisit->c_from) 
-		// 	unvisit->c_from = NULL;
 		unvisit->is_empty = 1;
 		unvisit = unvisit->next;
 	}
 }
 
-void	bfs(t_info *info)
+void	bfs(t_info *info)//many lines
 {
 	t_qlist *qlist;
 	t_qlist *qlist_top;
+	//t_qlist *qlist_to_del;
 	t_room *temp_adj;
-
 	t_room *qwerty;
+
 	qwerty = info->graph_top;
 	while (qwerty)
 	{
@@ -29,6 +28,8 @@ void	bfs(t_info *info)
 	}
 	qlist = new_qlist(info->start);
 	qlist_top = qlist;
+	//qlist_to_del = qlist;//we will delete the list via this pointer
+	info->qlist_top = qlist;
 	while (qlist_top)
 	{
 		if (qlist_top->actual == info->start)
@@ -51,10 +52,17 @@ void	bfs(t_info *info)
 		}
 		qlist_top = qlist_top->next;
 	}
+	//CLEAN QLIST LIST VIA FUNCTION
+	
+	//clean_qlist(&qlist_to_del);
+	//system("leaks -q lem-in");
+	//ERROR_EXIT;
 	unvisit_rooms(info);
+	//system("leaks -q lem-in");
+	//ERROR_EXIT;
 }
 
-void	remove_connection(t_room *from, char *to)
+void	remove_connection(t_room *from, char *to)//many lines
 {
 	t_room *temp_adj;
 
@@ -84,7 +92,7 @@ void	remove_connection(t_room *from, char *to)
 	}
 }
 
-t_path	*shortest_path(t_info *info, int *shortest_len)
+t_path	*shortest_path(t_info *info, int *shortest_len)//remove comments
 {
 	t_room *way;
 	t_path *shortest;
