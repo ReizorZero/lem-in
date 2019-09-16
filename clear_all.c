@@ -97,9 +97,51 @@ void	free_ants(t_ant **ant)
 	if (ant)
 		while ((*ant))
 		{
-			printf("DELETED AN ANT\n");
+			//printf("DELETED AN ANT\n");
 			delete = (*ant);
 			(*ant) = (*ant)->next;
+			free(delete);
+		}
+}
+
+void	free_adj_graph(t_room **adj_graph)
+{
+	t_room	*delete;
+
+	if (adj_graph)
+		while ((*adj_graph))
+		{
+			delete = (*adj_graph);
+			(*adj_graph) = (*adj_graph)->next;
+			free(delete->name);
+			free(delete);
+		}
+}
+
+void	free_graph(t_room **graph)
+{
+	t_room	*delete;
+
+	if (graph)
+		while ((*graph))
+		{
+			delete = (*graph);
+			(*graph) = (*graph)->next;
+			free_adj_graph(&(delete->adj_top));//deleting the path we have a pointer to
+			free(delete->name);
+			free(delete);
+		}
+}
+
+void	free_qlist(t_qlist **qlist)
+{
+	t_qlist	*delete;
+
+	if (qlist)
+		while ((*qlist))
+		{
+			delete = (*qlist);
+			(*qlist) = (*qlist)->next;
 			free(delete);
 		}
 }
@@ -113,4 +155,6 @@ void	clear_all(t_info **info)//probably, we should free paths after we free room
 	// t_ant		*ants;//del these
 	free_ants(&((*info)->ants_top));
 	// t_qlist		*qlist_top;
+	free_graph(&((*info)->graph_top));
+	free_qlist(&((*info)->qlist_top));
 }

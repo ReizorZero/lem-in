@@ -30,15 +30,14 @@ void find_room(char *s1, char *s2, t_info *info)
 		{
 			room_found = 1;
 			if (!temp->adj_room)
-			{
 				temp->adj_room = new_room(s2, 0, 0);
-				temp->adj_top = temp->adj_room;
-			}
 			else
 			{
 				temp->adj_room->next = new_room(s2, 0, 0);
 				temp->adj_room = temp->adj_room->next;
 			}
+			if (!temp->adj_top)
+				temp->adj_top = temp->adj_room;
 		}
 		temp = temp->next;
 	}

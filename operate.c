@@ -51,6 +51,7 @@ int	pathscmp(t_path *path1, t_path *path2)
 int remove_ant_index(t_ant *ants_top, int index, t_info *info)
 {
 	t_ant *temp;
+	t_ant *del;
 
 	temp = ants_top;
 	while (temp)
@@ -58,14 +59,15 @@ int remove_ant_index(t_ant *ants_top, int index, t_info *info)
 		if (temp == ants_top && temp->index == index)//head of the list
 		{
 			info->ants_n--;
-			//printf("LEEEEEEEEK!\n");
+			del = ants_top;
 			ants_top = ants_top->next;//AND CLEAN THE FUCKING LEAKS, SON!
 			return (1);
 		}
 		else if (temp->next && temp->next->index == index)
 		{
 			info->ants_n--;
-			//printf("LEEEEEEEEK!\n");
+			del = temp->next;
+			free(del);
 			temp->next = temp->next->next;//CLEAN THE FUCKING LEAKS HERE AS WELL, SON!
 			return (1);
 		}
@@ -77,6 +79,7 @@ int remove_ant_index(t_ant *ants_top, int index, t_info *info)
 int remove_path_id(t_info *info, int id)
 {
 	t_path_list *temp;
+	t_path_list *del;
 
 	temp = info->paths_top;
 	while (temp)
@@ -90,6 +93,9 @@ int remove_path_id(t_info *info, int id)
 		else if (temp->next && temp->next->id == id)
 		{
 			info->paths_n--;
+			del = temp->next;
+			free_path(&(del->actual_path));//I dunno does that even work
+			free(del);
 			temp->next = temp->next->next;//CLEAN THE FUCKING LEAKS HERE AS WELL, SON!
 			return (1);
 		}
@@ -224,8 +230,7 @@ void	fucking_ants(t_info *info)
 			if (temp_ant->delay == 0)
 				temp_ant->ant_path = do_fucking_step(temp_ant);
 			else
-				temp_ant->delay--;
-			
+				temp_ant->delay--;			
 			if (temp_ant->ant_path->actual != info->end)
 			{
 				if (temp_ant->ant_path->actual != info->start)

@@ -63,8 +63,9 @@ void	bfs(t_info *info)//many lines
 }
 
 void	remove_connection(t_room *from, char *to)//many lines
-{
+{//HERE ARE LEAKS!
 	t_room *temp_adj;
+	//t_room *del;
 
 	if (from->adj_origin)
 	{
@@ -72,9 +73,18 @@ void	remove_connection(t_room *from, char *to)//many lines
 		while (temp_adj)
 		{
 			if (!ft_strcmp(temp_adj->name, to))
+			{
+				//del = from->adj_top;
+				//free(del->name);
 				from->adj_origin->adj_top = from->adj_origin->adj_top->next;
+			}
 			else if (temp_adj->next && !ft_strcmp(temp_adj->next->name, to))
+			{
+				//del = temp_adj->next;
+				//free(del->name);//del this, and it fucks up the whole output
+				//free(del);
 				temp_adj->next = temp_adj->next->next;
+			}
 			temp_adj = temp_adj->next;
 		}
 	}
@@ -84,9 +94,18 @@ void	remove_connection(t_room *from, char *to)//many lines
 		while (temp_adj)
 		{
 			if (!ft_strcmp(temp_adj->name, to))
+			{
+				//del = from->adj_top;
+				//free(del->name);
 				from->adj_top = from->adj_top->next;
+			}
 			else if (temp_adj->next && !ft_strcmp(temp_adj->next->name, to))
+			{
+				//del = temp_adj->next;
+				//free(del->name);//del this, and it fucks up the whole output
+				//free(del);
 				temp_adj->next = temp_adj->next->next;
+			}
 			temp_adj = temp_adj->next;
 		}
 	}

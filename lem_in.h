@@ -109,6 +109,8 @@ void		operate(t_info *info);
 void		bfs(t_info *info);
 t_path	*shortest_path(t_info *info, int *shortest_len);
 void	clear_all(t_info **info);
+
+void	free_path(t_path **path);
 //void free_qlist(t_qlist **qlist_top);
 
 void	print_two_dim(t_room *dat);//REMOVE THEN
