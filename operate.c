@@ -144,20 +144,10 @@ void	distinct_rooms(t_info *info)
 	}
 }
 
-t_path *do_fucking_step(t_ant *ant)//, t_info *info)
+t_path *do_fucking_step(t_ant *ant)
 {
-	//int x = info->ants_n; x++;
-	// if (!ant->ant_path->prev)
-	// {
-	// 	//printf(" {{ants: %i}} ", info->ants);
-	// 	//printf(" [remove ant %i] ", ant->index);
-	// 	//remove_ant_index(ant->index);
-	// 	//info->ants--;
-	// }
-	// else
 	if (ant->ant_path->prev)
 		ant->ant_path = ant->ant_path->prev;
-	//printf(" {{ants: %i}} ", info->ants);
 	return (ant->ant_path);
 }
 
@@ -256,10 +246,7 @@ void	operate(t_info *info)
 	shortest_len = 0;
 	while (info->start->adj_top)
 	{
-		bfs(info);//<--LEEKS
-		//free_qlist(&((info)->qlist_top));
-		//system("leaks -q lem-in");
-		//ERROR_EXIT;
+		bfs(info);
 		shortest = shortest_path(info, &shortest_len);
 		if (!shortest)
 		{
@@ -286,16 +273,9 @@ void	operate(t_info *info)
 			else
 				break ;
 		}
-		//printf("|| %s ||", info->graph_top->next->next->name);
-		//if (info->graph_top->next->next->c_from)
-			//info->graph_top->next->next->c_from = NULL;
 		if (!info->paths_top)
 			info->paths_top = info->paths;
 	}
-	//free_qlist(&((info)->qlist_top));
-	// system("leaks -q lem-in");
-	// ERROR_EXIT;
-
 	distinct_rooms(info);
 	if (info->ants_n > 1 && info->paths_n > 1)
 		efficiency(info);

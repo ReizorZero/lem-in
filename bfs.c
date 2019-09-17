@@ -12,11 +12,10 @@ void	unvisit_rooms(t_info *info)
 	}
 }
 
-void	bfs(t_info *info)//many lines
+void	bfs(t_info *info)
 {
 	t_qlist *qlist;
 	t_qlist *qlist_top;
-	//t_qlist *qlist_to_del;
 	t_room *temp_adj;
 	t_room *qwerty;
 
@@ -28,7 +27,6 @@ void	bfs(t_info *info)//many lines
 	}
 	qlist = new_qlist(info->start);
 	qlist_top = qlist;
-	//qlist_to_del = qlist;//we will delete the list via this pointer
 	info->qlist_top = qlist;
 	while (qlist_top)
 	{
@@ -52,20 +50,12 @@ void	bfs(t_info *info)//many lines
 		}
 		qlist_top = qlist_top->next;
 	}
-	//CLEAN QLIST LIST VIA FUNCTION
-	
-	//clean_qlist(&qlist_to_del);
-	//system("leaks -q lem-in");
-	//ERROR_EXIT;
 	unvisit_rooms(info);
-	//system("leaks -q lem-in");
-	//ERROR_EXIT;
 }
 
-void	remove_connection(t_room *from, char *to)//many lines
-{//HERE ARE LEAKS!
+void	remove_connection(t_room *from, char *to)
+{
 	t_room *temp_adj;
-	//t_room *del;
 
 	if (from->adj_origin)
 	{
@@ -73,18 +63,9 @@ void	remove_connection(t_room *from, char *to)//many lines
 		while (temp_adj)
 		{
 			if (!ft_strcmp(temp_adj->name, to))
-			{
-				//del = from->adj_top;
-				//free(del->name);
 				from->adj_origin->adj_top = from->adj_origin->adj_top->next;
-			}
 			else if (temp_adj->next && !ft_strcmp(temp_adj->next->name, to))
-			{
-				//del = temp_adj->next;
-				//free(del->name);//del this, and it fucks up the whole output
-				//free(del);
 				temp_adj->next = temp_adj->next->next;
-			}
 			temp_adj = temp_adj->next;
 		}
 	}
@@ -94,24 +75,16 @@ void	remove_connection(t_room *from, char *to)//many lines
 		while (temp_adj)
 		{
 			if (!ft_strcmp(temp_adj->name, to))
-			{
-				//del = from->adj_top;
-				//free(del->name);
+
 				from->adj_top = from->adj_top->next;
-			}
 			else if (temp_adj->next && !ft_strcmp(temp_adj->next->name, to))
-			{
-				//del = temp_adj->next;
-				//free(del->name);//del this, and it fucks up the whole output
-				//free(del);
 				temp_adj->next = temp_adj->next->next;
-			}
 			temp_adj = temp_adj->next;
 		}
 	}
 }
 
-t_path	*shortest_path(t_info *info, int *shortest_len)//remove comments
+t_path	*shortest_path(t_info *info, int *shortest_len)
 {
 	t_room *way;
 	t_path *shortest;
@@ -126,7 +99,6 @@ t_path	*shortest_path(t_info *info, int *shortest_len)//remove comments
 	shortest = new_path(way);
 	while (way)
 	{
-		//printf("%s -> ", shortest->actual->name);
 		shortest->next = new_path(way->c_from);
 		shortest->next->prev = shortest;
 		shortest = shortest->next;
@@ -134,36 +106,19 @@ t_path	*shortest_path(t_info *info, int *shortest_len)//remove comments
 	}
 	shortest_top = shortest;
 	head = shortest_top;
-	//printf("\n");
 	while (shortest)
 	{
 		shortest->head = head;
-		// if (shortest->actual->c_from)
-		// 	printf("%s[cf: %s] -> ", shortest->actual->name, shortest->actual->c_from->name);
-		// else if (shortest->actual->adj_origin)
-		// 	printf("%s[cf: %s] -> ", shortest->actual->name, shortest->actual->adj_origin->c_from->name);
-		// else
-		
-		//printf("%s -> ", shortest->actual->name);
 		if (shortest->prev)
 		{
 			remove_connection(shortest->actual, shortest->prev->actual->name);
-			//printf(" [ removed connection: %s-%s ] ", shortest->actual->name, shortest->prev->actual->name);
 			remove_connection(shortest->prev->actual, shortest->actual->name);
-			//printf(" [ removed connection: %s-%s ] ", shortest->prev->actual->name, shortest->actual->name);
 		}
 		path_len++;
 		shortest = shortest->prev;
 	}
-	//printf(" | l=%i", path_len - 1);
 	*shortest_len = path_len - 1;
 	if (info->max_path_len < path_len - 1)
 		info->max_path_len = path_len - 1;
-	// printf("|| %s ||", info->graph_top->next->next->name);
-	// if (info->graph_top->next->next->c_from)
-	// info->graph_top->next->next->c_from = NULL;
-	
-	//printf("\n");
-	//printf("\n");
 	return (shortest_top);
 }

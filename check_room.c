@@ -77,8 +77,7 @@ int	check_room(char *s, t_info *info, char flag)//clean leaks here
 			info->graph = info->graph->next;
 		}
         check_flag(s, info, flag);
-		//REMOVE THIS SHIT WITH FUNCTION, THAT DELETES ARRAY
-		free(arr[0]); free(arr[1]); free(arr[2]); free(arr);
+		free(arr[0]); free(arr[1]); free(arr[2]); free(arr);//REMOVE THIS SHIT WITH FUNCTION, THAT DELETES ARRAY
         return (1);
 	}
     return (0);

@@ -28,8 +28,6 @@ typedef struct	s_path
 	struct s_path	*next;
 	struct s_path	*prev;
 	t_room			*actual;
-	//int				path_len;
-	//int			ant_index;
 }				t_path;
 
 typedef struct	s_path_list
@@ -38,7 +36,6 @@ typedef struct	s_path_list
 	t_path 				*actual_path;
 	int					path_len;
 	int					id;
-	//int			ant_index;
 }				t_path_list;
 
 typedef struct	s_input
@@ -78,7 +75,6 @@ typedef struct	s_info
 	char		sorry;
 	t_input		*input;//del these
 	t_input		*input_top;
-	//t_path	*shortest_path;//for the case with one ant
 	t_ant		*ants;//del these
 	t_ant		*ants_top;
 	t_qlist		*qlist_top;
@@ -115,7 +111,6 @@ int remove_path_id(t_info *info, int id);
 void	clear_all(t_info **info);
 
 void	free_path(t_path **path);
-//void free_qlist(t_qlist **qlist_top);
 
 void	print_two_dim(t_room *dat);//REMOVE THEN
 
