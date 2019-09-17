@@ -37,7 +37,7 @@ void	free_path(t_path **path)
 		while ((*path))
 		{
 			delete = (*path);
-			(*path) = (*path)->next;
+			(*path) = (*path)->prev;
 			free(delete);
 			//printf("DELETED PATH\n");
 		}
@@ -85,7 +85,7 @@ void	free_adj_graph(t_room **adj_graph)
 			free(delete);
 			//printf("DELETED ADJ ROOM\n");
 		}
-	//(*adj_graph) = NULL;
+	(*adj_graph) = NULL;
 }
 
 void	free_graph(t_room **graph)
@@ -102,7 +102,7 @@ void	free_graph(t_room **graph)
 			free(delete);
 			//printf("DELETED ROOM\n");
 		}
-	//(*graph) = NULL;
+	(*graph) = NULL;
 }
 
 void	free_qlist(t_qlist **qlist)
@@ -138,6 +138,20 @@ void	free_lost_rooms(t_qlist **lost)
 	//(*graph) = NULL;
 }
 
+void	free_qlost(t_qlost **qlost)
+{
+	t_qlost	*delete;
+
+	if (qlost)
+		while ((*qlost))
+		{
+			delete = (*qlost);
+			(*qlost) = (*qlost)->next;
+			free(delete);
+			//printf("DELETED QLIST\n");
+		}
+}
+
 void	clear_all(t_info **info)//probably, we should free paths after we free rooms/graph_top
 {
 	//int x = (*info)->ants_n; x++;
@@ -145,9 +159,10 @@ void	clear_all(t_info **info)//probably, we should free paths after we free room
 	free_paths_list(&((*info)->paths_top));
 	free_ants(&((*info)->ants_top));
 	free_graph(&((*info)->graph_top));
-	free_qlist(&((*info)->qlist_top));
+	//free_qlist(&((*info)->qlist_top));
 	free_lost_rooms(&((*info)->lost_top));
-
+	//free_qlost(&((*info)->qlost_top));
+	
 	//free((*info)->ants_top);
 	//free((*info)->graph_top);
 	//free((*info)->input_top);

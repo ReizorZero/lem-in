@@ -24,6 +24,19 @@ void	unvisit_rooms(t_info *info)
 	}
 }
 
+void	lost_qlist(t_info *info, t_qlist *qlost)
+{
+	if (!info->qlost)
+		info->qlost = new_qlost(qlost);
+	else
+	{
+		info->qlost->next = new_qlost(qlost);
+		info->qlost = info->qlost->next;
+	}
+	if (!info->qlost_top)
+		info->qlost_top = info->qlost;
+}
+
 void	bfs(t_info *info)
 {
 	t_qlist	*qlist;
@@ -38,6 +51,7 @@ void	bfs(t_info *info)
 		qwerty = qwerty->next;
 	}
 	qlist = new_qlist(info->start);
+	//lost_qlist(info, qlist);
 	//printf("PROYOB QLIST===============\n");
 	qlist_top = qlist;
 	info->qlist_top = qlist;
@@ -55,6 +69,7 @@ void	bfs(t_info *info)
 			if (temp_adj->adj_origin->is_empty == 1 && temp_adj->adj_origin->exist == 1)
 			{
 				qlist->next = new_qlist(temp_adj);
+				//lost_qlist(info, qlist->next);
 				//printf("PROYOB QLIST===============\n");
 				qlist = qlist->next;
 				temp_adj->adj_origin->is_empty = 0;
@@ -66,6 +81,7 @@ void	bfs(t_info *info)
 		//PROBABLY THIS ALSO GIVES LEAKS
 		qlist_top = qlist_top->next;
 	}
+	free_qlist(&info->qlist_top);
 	unvisit_rooms(info);
 }
 
@@ -97,8 +113,9 @@ void	remove_connection(t_info *info, char *from, char *to)
 			{
 				if (temp_adj == temp->adj_top && !ft_strcmp(temp_adj->name, to))
 				{
-					temp->adj_top = temp->adj_top->next;
+					//collect_lost(info, temp->adj_top);
 					collect_lost(info, temp_adj);//does it matter if i replace it with temp->adj_top?
+					temp->adj_top = temp->adj_top->next;
 				}
 				else if (temp_adj->next && !ft_strcmp(temp_adj->next->name, to))
 				{
@@ -125,9 +142,11 @@ t_path	*shortest_path(t_info *info, int *shortest_len)
 	if (!info->end->c_from)
 		return (NULL);
 	shortest = new_path(way);
+	//printf("CREATED PATH\n");
 	while (way)
 	{
 		shortest->next = new_path(way->c_from);
+		//printf("CREATED PATH\n");
 		shortest->next->prev = shortest;
 		shortest = shortest->next;
 		way = way->c_from->adj_origin;

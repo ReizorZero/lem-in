@@ -72,6 +72,12 @@ typedef struct	s_qlist
 	t_room			*actual;
 }				t_qlist;
 
+typedef struct	s_qlost
+{
+	struct s_qlost	*next;
+	t_qlist			*actual;
+}				t_qlost;
+
 typedef struct	s_info
 {
 	int		ants_n;
@@ -93,6 +99,9 @@ typedef struct	s_info
 	t_qlist		*qlist_top;
 	t_qlist		*lost_rooms;
 	t_qlist		*lost_top;
+
+	t_qlost		*qlost;
+	t_qlost		*qlost_top;
 	//t_room *temp;
 }				t_info;
 
@@ -116,6 +125,7 @@ t_qlist		*new_qlist(t_room *room);
 t_path		*new_path(t_room *room);
 t_path_list *new_path_list(t_path *path);
 t_ant *new_ant(int index);
+t_qlost		*new_qlost(t_qlist *qlist);
 
 void		operate(t_info *info);
 void		bfs(t_info *info);

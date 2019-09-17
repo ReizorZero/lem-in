@@ -48,6 +48,18 @@ t_room		*new_room(char *name, int x, int y)
 	return (room);
 }
 
+t_qlost		*new_qlost(t_qlist *qlist)
+{
+	t_qlost *qlost;
+
+	qlost = (t_qlost*)malloc(sizeof(t_qlost));
+	if (!qlost)
+		return (NULL);
+	qlost->actual = qlist;
+	qlost->next = NULL;
+	return (qlost);
+}
+
 t_qlist		*new_qlist(t_room *room)
 {
 	t_qlist *qlist;
@@ -114,6 +126,8 @@ t_info *new_info(void)
 	info->ants_top = NULL;
 	info->qlist_top = NULL;
 	info->lost_rooms = NULL;
+	info->qlost = NULL;
+	info->qlost_top = NULL;
 	//info->temp = NULL;
 	return (info);
 }

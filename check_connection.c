@@ -33,7 +33,7 @@ void	find_room(char *s1, char *s2, t_info *info)
 {
 	int		room_found;
 	t_room	*temp;
-	t_room *del;
+	//t_room *del;
 
 	room_found = 0;
 	temp = info->graph_top;
@@ -47,7 +47,7 @@ void	find_room(char *s1, char *s2, t_info *info)
 			else
 			{
 				temp->adj_room->next = new_room(s2, 0, 0);
-				del = temp->adj_room->next;
+				//del = temp->adj_room->next;
 				// free(del->name);
 				// free(del);
 				temp->adj_room = temp->adj_room->next;
