@@ -108,6 +108,10 @@ t_ant *new_ant(int index);
 void		operate(t_info *info);
 void		bfs(t_info *info);
 t_path	*shortest_path(t_info *info, int *shortest_len);
+
+void	efficiency(t_info *info);
+int remove_path_id(t_info *info, int id);
+
 void	clear_all(t_info **info);
 
 void	free_path(t_path **path);

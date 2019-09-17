@@ -1,6 +1,6 @@
 #include "lem_in.h"
 
-/*
+
 void	output_paths(t_info *info)//REMOVE WHEN NOT NEEDED
 {
 	t_path_list *temp;
@@ -27,7 +27,7 @@ void	output_paths(t_info *info)//REMOVE WHEN NOT NEEDED
 	}
 	//printf("\n");
 }
-*/
+
 
 int	pathscmp(t_path *path1, t_path *path2)
 {
@@ -295,6 +295,9 @@ void	operate(t_info *info)
 	//free_qlist(&((info)->qlist_top));
 	// system("leaks -q lem-in");
 	// ERROR_EXIT;
+
 	distinct_rooms(info);
+	if (info->ants_n > 1 && info->paths_n > 1)
+		efficiency(info);
 	fucking_ants(info);
 }

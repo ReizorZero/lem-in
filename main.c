@@ -61,6 +61,6 @@ int		main(void)
 		ERROR_EXIT;
 	clear_all(&info);
 	free(info);
-	system("leaks -q lem-in");
+	//system("leaks -q lem-in");
 	return (0);
 }
