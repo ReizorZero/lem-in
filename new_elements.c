@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   new_elements.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rzero <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/17 16:14:00 by rzero             #+#    #+#             */
+/*   Updated: 2019/09/17 16:14:04 by rzero            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lem_in.h"
 
 t_room		*new_room(char *name, int x, int y)
@@ -32,6 +44,7 @@ t_room		*new_room(char *name, int x, int y)
 	room->is_empty = 1;
 	room->x = x;
 	room->y = y;
+	room->exist = 1;
 	return (room);
 }
 
@@ -100,6 +113,8 @@ t_info *new_info(void)
 	info->ants = NULL;
 	info->ants_top = NULL;
 	info->qlist_top = NULL;
+	info->lost_rooms = NULL;
+	//info->temp = NULL;
 	return (info);
 }
 

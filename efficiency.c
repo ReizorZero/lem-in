@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   efficiency.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rzero <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/17 16:13:09 by rzero             #+#    #+#             */
+/*   Updated: 2019/09/17 16:13:12 by rzero            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lem_in.h"
 
 float	calc_efficiency(t_info *info, int id_n)//CHECK IF WE HAVE ADDITIONAL LEAKS HERE, THOUGH THERE SHOULD NOT BE ANY

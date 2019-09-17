@@ -1,13 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_room.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rzero <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/17 16:12:46 by rzero             #+#    #+#             */
+/*   Updated: 2019/09/17 16:12:48 by rzero            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lem_in.h"
 
-void check_spaces(char *s)
+void	check_spaces(char *s)
 {
-    int i;
-    int spaces;
+	int i;
+	int spaces;
 
-    i = 0;
-    spaces = 0;
-    while (s[i] != '\0')
+	i = 0;
+	spaces = 0;
+	while (s[i] != '\0')
 	{
 		if (s[i] == ' ')
 			spaces++;
@@ -17,19 +29,19 @@ void check_spaces(char *s)
 		ERROR_EXIT;
 }
 
-void check_digits(char *s1, char *s2)
+void	check_digits(char *s1, char *s2)
 {
-    int i;
+	int i;
 
-    i = 0;
-    while (s1[i] != '\0')
+	i = 0;
+	while (s1[i] != '\0')
 	{
 		if (!ft_isdigit(s1[i]))
 			ERROR_EXIT;
 		i++;
 	}
-    i = 0;
-    while (s2[i] != '\0')
+	i = 0;
+	while (s2[i] != '\0')
 	{
 		if (!ft_isdigit(s2[i]))
 			ERROR_EXIT;
@@ -37,9 +49,9 @@ void check_digits(char *s1, char *s2)
 	}
 }
 
-void check_flag(char *s, t_info *info, char flag)
+void	check_flag(char *s, t_info *info, char flag)
 {
-    if (flag == 's')
+	if (flag == 's')
 	{
 		info->start = info->graph;
 		info->s_rooms++;
@@ -53,11 +65,11 @@ void check_flag(char *s, t_info *info, char flag)
 	}
 }
 
-int	check_room(char *s, t_info *info, char flag)//clean leaks here
+int		check_room(char *s, t_info *info, char flag)//clean leaks here
 {
 	char	**arr;
 
-    if (!ft_strchr(s, '-') && !(ft_strchr(s, '#')))
+	if (!ft_strchr(s, '-') && !(ft_strchr(s, '#')))
 	{
 		check_spaces(s);
 		arr = ft_strsplit(s, ' ');
@@ -73,12 +85,12 @@ int	check_room(char *s, t_info *info, char flag)//clean leaks here
 		{
 			check_existing(info, arr[0], ft_atoi(arr[1]), ft_atoi(arr[2]));
 			info->graph->next = new_room(arr[0],
-            ft_atoi(arr[1]), ft_atoi(arr[2]));
+			ft_atoi(arr[1]), ft_atoi(arr[2]));
 			info->graph = info->graph->next;
 		}
-        check_flag(s, info, flag);
+		check_flag(s, info, flag);
 		free(arr[0]); free(arr[1]); free(arr[2]); free(arr);//REMOVE THIS SHIT WITH FUNCTION, THAT DELETES ARRAY
-        return (1);
+		return (1);
 	}
-    return (0);
+	return (0);
 }

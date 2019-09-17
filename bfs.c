@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   bfs.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rzero <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/17 16:12:16 by rzero             #+#    #+#             */
+/*   Updated: 2019/09/17 16:12:19 by rzero            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lem_in.h"
 
 void	unvisit_rooms(t_info *info)
@@ -14,10 +26,10 @@ void	unvisit_rooms(t_info *info)
 
 void	bfs(t_info *info)
 {
-	t_qlist *qlist;
-	t_qlist *qlist_top;
-	t_room *temp_adj;
-	t_room *qwerty;
+	t_qlist	*qlist;
+	t_qlist	*qlist_top;
+	t_room	*temp_adj;
+	t_room	*qwerty;
 
 	qwerty = info->graph_top;
 	while (qwerty)
@@ -26,6 +38,7 @@ void	bfs(t_info *info)
 		qwerty = qwerty->next;
 	}
 	qlist = new_qlist(info->start);
+	//printf("PROYOB QLIST===============\n");
 	qlist_top = qlist;
 	info->qlist_top = qlist;
 	while (qlist_top)
@@ -39,58 +52,73 @@ void	bfs(t_info *info)
 			temp_adj = qlist_top->actual->adj_origin->adj_top;
 		while (temp_adj)
 		{
-			if (temp_adj->adj_origin->is_empty == 1)
+			if (temp_adj->adj_origin->is_empty == 1 && temp_adj->adj_origin->exist == 1)
 			{
 				qlist->next = new_qlist(temp_adj);
+				//printf("PROYOB QLIST===============\n");
 				qlist = qlist->next;
 				temp_adj->adj_origin->is_empty = 0;
 				temp_adj->adj_origin->c_from = qlist_top->actual;
 			}
+			//printf("PROYOB QLIST===============\n");
 			temp_adj = temp_adj->next;
 		}
+		//PROBABLY THIS ALSO GIVES LEAKS
 		qlist_top = qlist_top->next;
 	}
 	unvisit_rooms(info);
 }
 
-void	remove_connection(t_room *from, char *to)
+void	collect_lost(t_info *info, t_room *lost_room)
 {
+	if (!info->lost_rooms)
+		info->lost_rooms = new_qlist(lost_room);
+	else
+	{
+		info->lost_rooms->next = new_qlist(lost_room);
+		info->lost_rooms = info->lost_rooms->next;
+	}
+	if (!info->lost_top)
+		info->lost_top = info->lost_rooms;
+}
+
+void	remove_connection(t_info *info, char *from, char *to)
+{
+	t_room *temp;
 	t_room *temp_adj;
 
-	if (from->adj_origin)
+	temp = info->graph_top;
+	while(temp)
 	{
-		temp_adj = from->adj_origin->adj_top;
-		while (temp_adj)
+		if (!ft_strcmp(temp->name, from))
 		{
-			if (!ft_strcmp(temp_adj->name, to))
-				from->adj_origin->adj_top = from->adj_origin->adj_top->next;
-			else if (temp_adj->next && !ft_strcmp(temp_adj->next->name, to))
-				temp_adj->next = temp_adj->next->next;
-			temp_adj = temp_adj->next;
+			temp_adj = temp->adj_top;
+			while (temp_adj)
+			{
+				if (temp_adj == temp->adj_top && !ft_strcmp(temp_adj->name, to))
+				{
+					temp->adj_top = temp->adj_top->next;
+					collect_lost(info, temp_adj);//does it matter if i replace it with temp->adj_top?
+				}
+				else if (temp_adj->next && !ft_strcmp(temp_adj->next->name, to))
+				{
+					collect_lost(info, temp_adj->next);
+					temp_adj->next = temp_adj->next->next;
+				}
+				temp_adj = temp_adj->next;
+			}
 		}
-	}
-	if (!from->adj_origin)
-	{
-		temp_adj = from->adj_top;
-		while (temp_adj)
-		{
-			if (!ft_strcmp(temp_adj->name, to))
-
-				from->adj_top = from->adj_top->next;
-			else if (temp_adj->next && !ft_strcmp(temp_adj->next->name, to))
-				temp_adj->next = temp_adj->next->next;
-			temp_adj = temp_adj->next;
-		}
+		temp = temp->next;
 	}
 }
 
 t_path	*shortest_path(t_info *info, int *shortest_len)
 {
-	t_room *way;
-	t_path *shortest;
-	t_path *shortest_top;
-	int path_len;
-	t_path *head;
+	t_room	*way;
+	t_path	*shortest;
+	t_path	*shortest_top;
+	int		path_len;
+	t_path	*head;
 
 	path_len = 0;
 	way = info->end;
@@ -111,8 +139,8 @@ t_path	*shortest_path(t_info *info, int *shortest_len)
 		shortest->head = head;
 		if (shortest->prev)
 		{
-			remove_connection(shortest->actual, shortest->prev->actual->name);
-			remove_connection(shortest->prev->actual, shortest->actual->name);
+			remove_connection(info, shortest->actual->name, shortest->prev->actual->name);
+			remove_connection(info, shortest->prev->actual->name, shortest->actual->name);
 		}
 		path_len++;
 		shortest = shortest->prev;

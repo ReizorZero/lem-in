@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lem_in.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rzero <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/17 16:13:23 by rzero             #+#    #+#             */
+/*   Updated: 2019/09/17 16:13:26 by rzero            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef LEM_IN_H
 # define LEM_IN_H
 
@@ -20,6 +32,7 @@ typedef struct	s_room
 	int				is_empty;
 	int 			x;
 	int 			y;
+	int				exist;
 }				t_room;
 
 typedef struct	s_path
@@ -78,6 +91,9 @@ typedef struct	s_info
 	t_ant		*ants;//del these
 	t_ant		*ants_top;
 	t_qlist		*qlist_top;
+	t_qlist		*lost_rooms;
+	t_qlist		*lost_top;
+	//t_room *temp;
 }				t_info;
 
 int			map(t_info *info);
@@ -111,6 +127,7 @@ int remove_path_id(t_info *info, int id);
 void	clear_all(t_info **info);
 
 void	free_path(t_path **path);
+void	free_qlist(t_qlist **qlist);
 
 void	print_two_dim(t_room *dat);//REMOVE THEN
 

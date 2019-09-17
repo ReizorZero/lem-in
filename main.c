@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rzero <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/17 16:13:37 by rzero             #+#    #+#             */
+/*   Updated: 2019/09/17 16:13:39 by rzero            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lem_in.h"
 
 void	print_one_dim(t_room *dat)//REMOVE THEN
@@ -43,7 +55,6 @@ void print_file(t_info *info)
 		temp_inpt = temp_inpt->next;
 	}
 	printf("\n");
-	//and delete list with input after dat
 }
 
 int		main(void)
@@ -54,13 +65,12 @@ int		main(void)
 	if (map(info))
 	{
 		print_file(info);
-		operate(info);//<--LEEKS
-		//system("leaks -q lem-in");
+		operate(info);
+		//system("leaks -q lem-in");//4 leaks @ map_1 in shortest_path
 	}
 	else
 		ERROR_EXIT;
 	clear_all(&info);
-	free(info);
-	//system("leaks -q lem-in");
+	system("leaks -q lem-in");//15 leaks @ map_1
 	return (0);
 }

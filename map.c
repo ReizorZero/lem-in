@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rzero <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/17 16:13:48 by rzero             #+#    #+#             */
+/*   Updated: 2019/09/17 16:13:51 by rzero            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lem_in.h"
 
 void add_line(t_info *info, char *s)
@@ -120,16 +132,16 @@ void connection_exists(t_info *info, char *room_1, char *room_2)
 
 void	check_line(char *s, t_info *info)
 {
-    int found_room;
-    int found_connection;
+	int found_room;
+	int found_connection;
 
-    if (s[0] == '\0')
+	if (s[0] == '\0')
 		ERROR_EXIT;
 	check_dashes(s, info);
-    found_connection = check_connection(s, info);
+	found_connection = check_connection(s, info);
 	found_room = check_room(s, info, '-');
-    if (found_room == 1 && info->sorry == 'c')
-        ERROR_EXIT;
+	if (found_room == 1 && info->sorry == 'c')
+		ERROR_EXIT;
 }
 
 void	connect_origins(t_info *info)

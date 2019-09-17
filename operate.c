@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   operate.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rzero <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/17 16:14:11 by rzero             #+#    #+#             */
+/*   Updated: 2019/09/17 16:14:13 by rzero            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lem_in.h"
 
 
@@ -248,6 +260,8 @@ void	operate(t_info *info)
 	{
 		bfs(info);
 		shortest = shortest_path(info, &shortest_len);
+		//system("leaks -q lem-in");
+		// ERROR_EXIT;
 		if (!shortest)
 		{
 			info->start->adj_top = NULL;
@@ -273,9 +287,11 @@ void	operate(t_info *info)
 			else
 				break ;
 		}
+		//system("leaks -q lem-in");
 		if (!info->paths_top)
 			info->paths_top = info->paths;
 	}
+	//system("leaks -q lem-in");
 	distinct_rooms(info);
 	if (info->ants_n > 1 && info->paths_n > 1)
 		efficiency(info);
