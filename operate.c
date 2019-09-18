@@ -13,34 +13,6 @@
 #include "lem_in.h"
 
 
-void	output_paths(t_info *info)//REMOVE WHEN NOT NEEDED
-{
-	t_path_list *temp;
-	t_path *temp_aside;
-
-	temp = info->paths_top;
-	while (temp)
-	{
-		temp_aside = temp->actual_path;
-		while (temp_aside)
-		{
-			printf("%s ~~> ", temp_aside->actual->name);
-			temp_aside = temp_aside->prev;
-		}
-		//printf(" | id = %i | len = %i\n", temp->id, temp->path_len);
-
-		printf(" | id = %i | len = %i\n\n", temp->id, temp->path_len);
-		
-		//printf(" | id = %i\n\n", temp->id);
-		//printf(" | len = %i", temp->path_len);
-		//printf("\n");
-		//printf("\n");
-		temp = temp->next;
-	}
-	//printf("\n");
-}
-
-
 int	pathscmp(t_path *path1, t_path *path2)
 {
 	t_path *p1;
@@ -68,11 +40,11 @@ int remove_ant_index(t_ant *ants_top, int index, t_info *info)
 	temp = ants_top;
 	while (temp)
 	{
-		if (temp == ants_top && temp->index == index)//head of the list
+		if (temp == ants_top && temp->index == index)
 		{
 			info->ants_n--;
 			del = ants_top;
-			ants_top = ants_top->next;//AND CLEAN THE FUCKING LEAKS, SON!
+			ants_top = ants_top->next;
 			return (1);
 		}
 		else if (temp->next && temp->next->index == index)
@@ -80,7 +52,7 @@ int remove_ant_index(t_ant *ants_top, int index, t_info *info)
 			info->ants_n--;
 			del = temp->next;
 			free(del);
-			temp->next = temp->next->next;//CLEAN THE FUCKING LEAKS HERE AS WELL, SON!
+			temp->next = temp->next->next;
 			return (1);
 		}
 		temp = temp->next;
@@ -104,27 +76,22 @@ void to_garbage(t_info *info, void *ptr)
 int remove_path_id(t_info *info, int id)
 {
 	t_path_list *temp;
-	//t_path_list *del;
 
 	temp = info->paths_top;
 	while (temp)
 	{
-		if (temp == info->paths_top && temp->id == id)//head of the list
+		if (temp == info->paths_top && temp->id == id)
 		{
-			info->paths_top = info->paths_top->next;//AND CLEAN THE FUCKING LEAKS, SON!
+			info->paths_top = info->paths_top->next;
 			info->paths_n--;
 			return (1);
 		}
 		else if (temp->next && temp->next->id == id)
 		{
 			info->paths_n--;
-			//del = temp->next;
-			//free_path(&(del->actual_path));//I dunno does that even work
 			to_garbage(info, temp->next);
 			to_garbage(info, temp->next->actual_path);
-			//del = temp->next;
-			//free(del);
-			temp->next = temp->next->next;//CLEAN THE FUCKING LEAKS HERE AS WELL, SON!
+			temp->next = temp->next->next;
 			return (1);
 		}
 		temp = temp->next;
@@ -141,22 +108,22 @@ void	distinct_rooms(t_info *info)
 	int occ;
 
 	temp_room = info->graph_top;
-	while (temp_room)//we go through all the rooms
+	while (temp_room)
 	{
 		occ = 0;
 		temp_pl = info->paths_top;
 		last_path = NULL;
-		while (temp_pl)//we go through all the paths
+		while (temp_pl)
 		{
 			temp_path = temp_pl->actual_path->head;
-			while (temp_path)//we go through all the rooms in this path
+			while (temp_path)
 			{
 				if (!ft_strcmp(temp_room->name, temp_path->actual->name)
 				&& ft_strcmp(temp_room->name, info->start->name)
 				&& ft_strcmp(temp_room->name, info->end->name))
 				{
 					if (!last_path)
-					last_path = temp_pl;//we mark the path, if it has the room - it's first occurance (once)
+					last_path = temp_pl;
 					else
 					{
 						(temp_pl->path_len >= last_path->path_len) ? remove_path_id(info, temp_pl->id) :
@@ -276,8 +243,6 @@ void	operate(t_info *info)
 	{
 		bfs(info);
 		shortest = shortest_path(info, &shortest_len);
-		//system("leaks -q lem-in");
-		// ERROR_EXIT;
 		if (!shortest)
 		{
 			info->start->adj_top = NULL;
@@ -303,11 +268,9 @@ void	operate(t_info *info)
 			else
 				break ;
 		}
-		//system("leaks -q lem-in");
 		if (!info->paths_top)
 			info->paths_top = info->paths;
 	}
-	//system("leaks -q lem-in");
 	distinct_rooms(info);
 	if (info->ants_n > 1 && info->paths_n > 1)
 		efficiency(info);

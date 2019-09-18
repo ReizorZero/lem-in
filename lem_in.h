@@ -31,14 +31,13 @@ typedef struct	s_room
 {
 	char			*name;
 	struct s_room	*next;
-	struct s_room	*adj_room;//MALLOC
+	struct s_room	*adj_room;
 	struct s_room	*adj_top;
 	struct s_room	*c_from;
 	struct s_room	*adj_origin;
 	int				is_empty;
 	int 			x;
 	int 			y;
-	int				exist;
 }				t_room;
 
 typedef struct	s_path

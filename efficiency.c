@@ -12,7 +12,7 @@
 
 #include "lem_in.h"
 
-float	calc_efficiency(t_info *info, int id_n)//CHECK IF WE HAVE ADDITIONAL LEAKS HERE, THOUGH THERE SHOULD NOT BE ANY
+float	calc_efficiency(t_info *info, int id_n)
 {
 	float eff;
 	float ants_n;
@@ -55,7 +55,7 @@ void	efficiency(t_info *info)
 
 
 	i = 0;
-	effs = (float*)malloc(sizeof(float) * info->paths_n);//FREE MEMORY HERE
+	effs = (float*)malloc(sizeof(float) * info->paths_n);
 	while (i < info->paths_n)
 	{
 		effs[i] = calc_efficiency(info, i + 1);

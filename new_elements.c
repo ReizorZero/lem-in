@@ -25,27 +25,10 @@ t_garbage *new_garbage(void *ptr)
 t_room		*new_room(char *name, int x, int y)
 {
 	t_room *room;
-	//char *temp;
 
 	room = (t_room*)malloc(sizeof(t_room));
 	if (!room)
 		return (NULL);
-	//		BLYAD, POFIKSI ETO!!!!! 
-
-
-	// temp = room->name;
-	// room->name = ft_strdup(name);
-	// free(temp);//WHY THE FUCK Y NO WORK???
-	
-	//temp = ft_strdup(name);
-	// room->name = (char*)malloc(sizeof(char) * ft_strlen(name));
-	// ft_strcpy(room->name, name);
-	//temp = NULL;
-	// free(temp);//WHY THE FUCK Y NO WORK???
-
-	// room->name = (char*)malloc(sizeof(char) * ft_strlen(name));
-	// ft_strcpy(room->name, name);
-
 	room->name = ft_strdup(name);
 	room->next = NULL;
 	room->adj_room = NULL;
@@ -54,7 +37,6 @@ t_room		*new_room(char *name, int x, int y)
 	room->is_empty = 1;
 	room->x = x;
 	room->y = y;
-	room->exist = 1;
 	return (room);
 }
 
@@ -140,7 +122,6 @@ t_info *new_info(void)
 	info->qlost_top = NULL;
 	info->g = NULL;
 	info->top_g = NULL;
-	//info->temp = NULL;
 	return (info);
 }
 
@@ -151,7 +132,7 @@ t_input *new_input(char *str)
 	input = (t_input*)malloc(sizeof(t_input));
 	if (!input)
 		return (NULL);
-	input->str = ft_strdup(str);//clear memory here should you do it
+	input->str = ft_strdup(str);
 	input->next = NULL;
 	return (input);
 }
