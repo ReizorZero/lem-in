@@ -65,6 +65,15 @@ void	check_flag(char *s, t_info *info, char flag)
 	}
 }
 
+int		ret_and_del(char **arr)
+{
+	free(arr[0]);
+	free(arr[1]);
+	free(arr[2]);
+	free(arr);
+	return (1);
+}
+
 int		check_room(char *s, t_info *info, char flag)
 {
 	char	**arr;
@@ -89,8 +98,7 @@ int		check_room(char *s, t_info *info, char flag)
 			info->graph = info->graph->next;
 		}
 		check_flag(s, info, flag);
-		free(arr[0]); free(arr[1]); free(arr[2]); free(arr);
-		return (1);
+		return (ret_and_del(arr));
 	}
 	return (0);
 }

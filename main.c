@@ -12,39 +12,7 @@
 
 #include "lem_in.h"
 
-void	print_one_dim(t_room *dat)//REMOVE THEN
-{
-	t_room *temp;
-
-	temp = dat;
-	while (temp)
-	{
-		printf("[%s]\n", temp->name);
-		temp = temp->next;
-	}
-}
-
-void	print_two_dim(t_room *dat)//REMOVE THEN
-{
-	t_room *temp;
-	t_room *temp_aside;
-
-	temp = dat;
-	while (temp)
-	{
-		printf("[%s]\t", temp->name);
-		temp_aside = temp->adj_top;
-		while (temp_aside)
-		{
-			printf("{%s} \t", temp_aside->name);
-			temp_aside = temp_aside->next;
-		}
-		printf("\n");
-		temp = temp->next;
-	}
-}
-
-void print_file(t_info *info)
+void	print_file(t_info *info)
 {
 	t_input *temp_inpt;
 
@@ -57,6 +25,16 @@ void print_file(t_info *info)
 	printf("\n");
 }
 
+void	do_the_rest(t_info *info)
+{
+	distinct_rooms(info, NULL, NULL, NULL);
+	if (info->ants_n > 1 && info->paths_n > 1)
+		efficiency(info, 0);
+	create_ants(info);
+	set_ants_delay(info);
+	fucking_ants(info);
+}
+
 int		main(void)
 {
 	t_info *info;
@@ -65,12 +43,11 @@ int		main(void)
 	if (map(info))
 	{
 		print_file(info);
-		operate(info);
-		//system("leaks -q lem-in");//4 leaks @ map_1 in shortest_path
+		operate(info, NULL, 0);
+		do_the_rest(info);
 	}
 	else
 		ERROR_EXIT;
-	//clear_all(&info);
-	system("leaks -q lem-in");//15 leaks @ map_1
+	system("leaks -q lem-in");
 	return (0);
 }

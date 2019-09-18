@@ -12,103 +12,7 @@
 
 #include "lem_in.h"
 
-void add_line(t_info *info, char *s)
-{
-	if (!info->input)
-	{
-		info->input = new_input(s);
-		info->input_top = info->input;
-	}
-	else
-	{
-		info->input->next = new_input(s);
-		info->input = info->input->next;
-	}
-}
-
-t_room	*find_origin(t_info *info, t_room *room)
-{
-	t_room *temp;
-
-	temp = info->graph_top;
-	while (temp)
-	{
-		if (!ft_strcmp(temp->name, room->name))
-			return (temp);
-		temp = temp->next;
-	}
-	return (NULL);
-}
-
-void	check_ants_n(char *s, t_info *info)
-{
-	int i;
-
-	i = 0;
-	while (s[i] != '\0')
-	{
-		if (!ft_isdigit(s[i]))
-			ERROR_EXIT;
-		i++;
-	}
-	info->ants_n = ft_atoi(s);
-	add_line(info, s);
-	free(s);
-	if (info->ants_n <= 0)
-		ERROR_EXIT;
-}
-
-int check_existing(t_info *info, char *room_name, int x, int y)
-{
-	t_room *temp;
-
-	temp = info->graph_top;
-	while (temp)
-	{
-		if (!ft_strcmp(temp->name,room_name))
-			ERROR_EXIT;
-		if (temp->x == x && temp->y == y)
-			ERROR_EXIT;
-		temp = temp->next;
-	}
-	return (1);
-}
-
-
-void	check_dashes(char *s, t_info *info)//REDUCE LENGTH HERE
-{
-	if (s[0] == '#')
-	{
-		if (!ft_strcmp(s, "##start"))
-		{
-			get_next_line(0, &s);
-			if (!ft_strcmp(s, "##start") || ft_strchr(s, '-'))
-				ERROR_EXIT;
-			while (s[0] == '#')
-			{
-				free(s);
-				get_next_line(0, &s);
-			}
-			check_room(s, info, 's');
-			free(s);
-		}
-		else if (!ft_strcmp(s, "##end"))
-		{
-			get_next_line(0, &s);
-			if (!ft_strcmp(s, "##end") || ft_strchr(s, '-'))
-				ERROR_EXIT;
-			while (s[0] == '#')
-			{
-				free(s);
-				get_next_line(0, &s);
-			}
-			check_room(s, info, 'e');
-			free(s);
-		}
-	}
-}
-
-void connection_exists(t_info *info, char *room_1, char *room_2)
+void	connection_exists(t_info *info, char *room_1, char *room_2)
 {
 	t_room *temp;
 	t_room *temp_adj;
@@ -162,7 +66,7 @@ void	connect_origins(t_info *info)
 	}
 }
 
-int	check_first_comment(char *s, t_info *info)
+int		check_first_comment(char *s, t_info *info)
 {
 	get_next_line(0, &s);
 	if (s[0] == '#')

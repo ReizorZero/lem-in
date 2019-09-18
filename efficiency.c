@@ -14,16 +14,15 @@
 
 float	calc_efficiency(t_info *info, int id_n)
 {
-	float eff;
-	float ants_n;
-	float paths_l_sum;
-	float paths_n;
-	t_path_list *temp_pl;
+	float		eff;
+	float		ants_n;
+	float		paths_l_sum;
+	float		paths_n;
+	t_path_list	*temp_pl;
 
 	ants_n = (float)info->ants_n;
 	paths_l_sum = 0;
 	paths_n = (float)id_n;
-
 	temp_pl = info->paths_top;
 	while (temp_pl && temp_pl->id <= id_n)
 	{
@@ -46,13 +45,11 @@ void	remove_ineff_paths(t_info *info, int id_n)
 	}
 }
 
-void	efficiency(t_info *info)
+void	efficiency(t_info *info, int i)
 {
-	float *effs;
-	int n_eff_id;
-	float max_eff;
-	int i;
-
+	float	*effs;
+	int		n_eff_id;
+	float	max_eff;
 
 	i = 0;
 	effs = (float*)malloc(sizeof(float) * info->paths_n);

@@ -12,29 +12,18 @@
 
 #include "lem_in.h"
 
-void	unvisit_rooms(t_info *info)
+void	add_line(t_info *info, char *s)
 {
-	t_room *unvisit;
-	
-	unvisit = info->graph_top;
-	while (unvisit)
+	if (!info->input)
 	{
-		unvisit->is_empty = 1;
-		unvisit = unvisit->next;
+		info->input = new_input(s);
+		info->input_top = info->input;
 	}
-}
-
-void	lost_qlist(t_info *info, t_qlist *qlost)
-{
-	if (!info->qlost)
-		info->qlost = new_qlost(qlost);
 	else
 	{
-		info->qlost->next = new_qlost(qlost);
-		info->qlost = info->qlost->next;
+		info->input->next = new_input(s);
+		info->input = info->input->next;
 	}
-	if (!info->qlost_top)
-		info->qlost_top = info->qlost;
 }
 
 void	bfs(t_info *info)
@@ -42,14 +31,8 @@ void	bfs(t_info *info)
 	t_qlist	*qlist;
 	t_qlist	*qlist_top;
 	t_room	*temp_adj;
-	t_room	*qwerty;
 
-	qwerty = info->graph_top;
-	while (qwerty)
-	{
-		qwerty->c_from = NULL;
-		qwerty = qwerty->next;
-	}
+	qwerty(info);
 	qlist = new_qlist(info->start);
 	qlist_top = qlist;
 	info->qlist_top = qlist;
@@ -62,43 +45,19 @@ void	bfs(t_info *info)
 		}
 		else
 			temp_adj = qlist_top->actual->adj_origin->adj_top;
-		while (temp_adj)
-		{
-			if (temp_adj->adj_origin->is_empty == 1)
-			{
-				qlist->next = new_qlist(temp_adj);
-				qlist = qlist->next;
-				temp_adj->adj_origin->is_empty = 0;
-				temp_adj->adj_origin->c_from = qlist_top->actual;
-			}
-			temp_adj = temp_adj->next;
-		}
+		temp_adj_cycle(&temp_adj, &qlist, &qlist_top);
 		qlist_top = qlist_top->next;
 	}
 	free_qlist(&info->qlist_top);
 	unvisit_rooms(info);
 }
 
-void	collect_lost(t_info *info, t_room *lost_room)
+void	remove_connection(t_info *info, char *from, char *to, t_room *temp)
 {
-	if (!info->lost_rooms)
-		info->lost_rooms = new_qlist(lost_room);
-	else
-	{
-		info->lost_rooms->next = new_qlist(lost_room);
-		info->lost_rooms = info->lost_rooms->next;
-	}
-	if (!info->lost_top)
-		info->lost_top = info->lost_rooms;
-}
-
-void	remove_connection(t_info *info, char *from, char *to)
-{
-	t_room *temp;
 	t_room *temp_adj;
 
 	temp = info->graph_top;
-	while(temp)
+	while (temp)
 	{
 		if (!ft_strcmp(temp->name, from))
 		{
@@ -122,6 +81,27 @@ void	remove_connection(t_info *info, char *from, char *to)
 	}
 }
 
+int		shortest_cycle(t_info **info, t_path **shortest, t_path **head)
+{
+	int path_len;
+
+	path_len = 0;
+	while (*shortest)
+	{
+		(*shortest)->head = *head;
+		if ((*shortest)->prev)
+		{
+			remove_connection(*info, (*shortest)->actual->name,
+			(*shortest)->prev->actual->name, NULL);
+			remove_connection(*info, (*shortest)->prev->actual->name,
+			(*shortest)->actual->name, NULL);
+		}
+		path_len++;
+		*shortest = (*shortest)->prev;
+	}
+	return (path_len);
+}
+
 t_path	*shortest_path(t_info *info, int *shortest_len)
 {
 	t_room	*way;
@@ -130,7 +110,6 @@ t_path	*shortest_path(t_info *info, int *shortest_len)
 	int		path_len;
 	t_path	*head;
 
-	path_len = 0;
 	way = info->end;
 	if (!info->end->c_from)
 		return (NULL);
@@ -142,19 +121,9 @@ t_path	*shortest_path(t_info *info, int *shortest_len)
 		shortest = shortest->next;
 		way = way->c_from->adj_origin;
 	}
+	head = shortest;
 	shortest_top = shortest;
-	head = shortest_top;
-	while (shortest)
-	{
-		shortest->head = head;
-		if (shortest->prev)
-		{
-			remove_connection(info, shortest->actual->name, shortest->prev->actual->name);
-			remove_connection(info, shortest->prev->actual->name, shortest->actual->name);
-		}
-		path_len++;
-		shortest = shortest->prev;
-	}
+	path_len = shortest_cycle(&info, &shortest, &head);
 	*shortest_len = path_len - 1;
 	if (info->max_path_len < path_len - 1)
 		info->max_path_len = path_len - 1;
