@@ -21,6 +21,12 @@
 
 # define ERROR_EXIT { ft_putendl("ERROR"); exit(0); }
 
+typedef struct	s_garbage
+{
+	void				*ptr;
+	struct s_garbage	*next;
+}				t_garbage;
+
 typedef struct	s_room
 {
 	char			*name;
@@ -102,7 +108,9 @@ typedef struct	s_info
 
 	t_qlost		*qlost;
 	t_qlost		*qlost_top;
-	//t_room *temp;
+
+	t_garbage	*g;
+	t_garbage	*top_g;
 }				t_info;
 
 int			map(t_info *info);
@@ -126,6 +134,7 @@ t_path		*new_path(t_room *room);
 t_path_list *new_path_list(t_path *path);
 t_ant *new_ant(int index);
 t_qlost		*new_qlost(t_qlist *qlist);
+t_garbage *new_garbage(void *ptr);
 
 void		operate(t_info *info);
 void		bfs(t_info *info);

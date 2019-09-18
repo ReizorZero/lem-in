@@ -12,6 +12,16 @@
 
 #include "lem_in.h"
 
+t_garbage *new_garbage(void *ptr)
+{
+	t_garbage *garbage;
+
+	garbage = (t_garbage*)malloc(sizeof(garbage));
+	garbage->ptr = ptr;
+	garbage->next = NULL;
+	return (garbage);
+}
+
 t_room		*new_room(char *name, int x, int y)
 {
 	t_room *room;
@@ -128,6 +138,8 @@ t_info *new_info(void)
 	info->lost_rooms = NULL;
 	info->qlost = NULL;
 	info->qlost_top = NULL;
+	info->g = NULL;
+	info->top_g = NULL;
 	//info->temp = NULL;
 	return (info);
 }

@@ -88,10 +88,23 @@ int remove_ant_index(t_ant *ants_top, int index, t_info *info)
 	return (0);
 }
 
+void to_garbage(t_info *info, void *ptr)
+{
+	if (!info->g)
+		info->g = new_garbage(ptr);
+	else
+	{
+		info->g->next = new_garbage(ptr);
+		info->g = info->g->next;
+	}
+	if (!info->top_g)
+		info->top_g = info->g;
+}
+
 int remove_path_id(t_info *info, int id)
 {
 	t_path_list *temp;
-	t_path_list *del;
+	//t_path_list *del;
 
 	temp = info->paths_top;
 	while (temp)
@@ -105,9 +118,12 @@ int remove_path_id(t_info *info, int id)
 		else if (temp->next && temp->next->id == id)
 		{
 			info->paths_n--;
-			del = temp->next;
-			free_path(&(del->actual_path));//I dunno does that even work
-			free(del);
+			//del = temp->next;
+			//free_path(&(del->actual_path));//I dunno does that even work
+			to_garbage(info, temp->next);
+			to_garbage(info, temp->next->actual_path);
+			//del = temp->next;
+			//free(del);
 			temp->next = temp->next->next;//CLEAN THE FUCKING LEAKS HERE AS WELL, SON!
 			return (1);
 		}

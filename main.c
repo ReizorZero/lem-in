@@ -70,7 +70,7 @@ int		main(void)
 	}
 	else
 		ERROR_EXIT;
-	clear_all(&info);
+	//clear_all(&info);
 	system("leaks -q lem-in");//15 leaks @ map_1
 	return (0);
 }
