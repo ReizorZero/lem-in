@@ -88,6 +88,19 @@ int remove_ant_index(t_ant *ants_top, int index, t_info *info)
 	return (0);
 }
 
+void	lost_smth(t_info *info, t_path_list *lost_pl)
+{
+	if (!info->lost_pl)
+		info->lost_pl = new_smth(lost_pl);
+	else
+	{
+		info->lost_pl->next = new_smth(lost_pl);
+		info->lost_pl = info->lost_pl->next;
+	}
+	if (!info->top_lost_pl)
+		info->top_lost_pl = info->lost_pl;
+}
+
 int remove_path_id(t_info *info, int id)
 {
 	t_path_list *temp;
@@ -106,9 +119,15 @@ int remove_path_id(t_info *info, int id)
 		{
 			info->paths_n--;
 			del = temp->next;
-			free_path(&(del->actual_path));//I dunno does that even work
-			free(del);
+			
+			//free_path(&(del->actual_path));//I dunno does that even work
+			//free(del);
+			
+			//collect pointers here and delete them later
+			lost_smth(info, temp->next);
 			temp->next = temp->next->next;//CLEAN THE FUCKING LEAKS HERE AS WELL, SON!
+			//free_path(&(del->actual_path));//I dunno does that even work
+			free(del);
 			return (1);
 		}
 		temp = temp->next;

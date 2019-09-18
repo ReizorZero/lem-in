@@ -48,6 +48,16 @@ t_room		*new_room(char *name, int x, int y)
 	return (room);
 }
 
+t_smth	*new_smth(t_path_list *lost_pl)
+{
+	t_smth *smth;
+
+	smth = (t_smth*)malloc(sizeof(t_smth));
+	smth->actual = lost_pl;
+	smth->next = NULL;
+	return (smth);
+}
+
 t_qlost		*new_qlost(t_qlist *qlist)
 {
 	t_qlost *qlost;
@@ -83,6 +93,7 @@ t_path *new_path(t_room *room)
 	path->next = NULL;
 	path->prev = NULL;
 	path->head = NULL;
+	path->tail = NULL;
 	return (path);
 }
 
@@ -128,6 +139,8 @@ t_info *new_info(void)
 	info->lost_rooms = NULL;
 	info->qlost = NULL;
 	info->qlost_top = NULL;
+	info->lost_pl = NULL;
+	info->top_lost_pl = NULL;
 	//info->temp = NULL;
 	return (info);
 }

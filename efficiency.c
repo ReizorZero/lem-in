@@ -55,7 +55,7 @@ void	efficiency(t_info *info)
 
 
 	i = 0;
-	effs = (float*)malloc(sizeof(float) * info->paths_n);//FREE MEMORY HERE
+	effs = (float*)malloc(sizeof(float) * info->paths_n);
 	while (i < info->paths_n)
 	{
 		effs[i] = calc_efficiency(info, i + 1);
@@ -72,6 +72,7 @@ void	efficiency(t_info *info)
 			n_eff_id = i + 1;
 		}
 		i++;
-	}//free array of effs!!!
+	}
+	free(effs);
 	remove_ineff_paths(info, n_eff_id);
 }
