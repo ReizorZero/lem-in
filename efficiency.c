@@ -55,7 +55,7 @@ void	efficiency(t_info *info)
 
 
 	i = 0;
-	effs = (float*)malloc(sizeof(float) * info->paths_n);
+	effs = (float*)malloc(sizeof(float) * info->paths_n);//FREE MEMORY HERE
 	while (i < info->paths_n)
 	{
 		effs[i] = calc_efficiency(info, i + 1);

@@ -66,10 +66,11 @@ int		main(void)
 	{
 		print_file(info);
 		operate(info);
+		//system("leaks -q lem-in");//4 leaks @ map_1 in shortest_path
 	}
 	else
 		ERROR_EXIT;
 	clear_all(&info);
-	system("leaks -q lem-in");
+	system("leaks -q lem-in");//15 leaks @ map_1
 	return (0);
 }

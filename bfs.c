@@ -136,15 +136,12 @@ t_path	*shortest_path(t_info *info, int *shortest_len)
 	t_path	*shortest_top;
 	int		path_len;
 	t_path	*head;
-	t_path	*tail;
 
 	path_len = 0;
 	way = info->end;
 	if (!info->end->c_from)
 		return (NULL);
 	shortest = new_path(way);
-	tail = shortest;
-	//printf("TAIL IS: %s\n", tail->actual->name);
 	//printf("CREATED PATH\n");
 	while (way)
 	{
@@ -159,7 +156,6 @@ t_path	*shortest_path(t_info *info, int *shortest_len)
 	while (shortest)
 	{
 		shortest->head = head;
-		shortest->tail = tail;
 		if (shortest->prev)
 		{
 			remove_connection(info, shortest->actual->name, shortest->prev->actual->name);
