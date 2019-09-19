@@ -19,7 +19,7 @@ void	print_file(t_info *info)
 	temp_inpt = info->input_top;
 	while (temp_inpt)
 	{
-		printf("%s\n", temp_inpt->str);
+		ft_printf("%s\n", temp_inpt->str);
 		temp_inpt = temp_inpt->next;
 	}
 	printf("\n");

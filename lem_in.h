@@ -15,9 +15,9 @@
 
 # include <unistd.h>
 # include <stdlib.h>
-# include <stdio.h>
 # include "libft/libft.h"
 # include "libft/get_next_line.h"
+# include "ft_printf/ft_printf.h"
 
 # define ERROR_EXIT { ft_putendl("ERROR"); exit(0); }
 
