@@ -109,6 +109,11 @@ typedef struct	s_info
 	t_garbage	*g;
 	t_garbage	*top_g;
 	int			occ;
+	int			beautiful_output;
+	int			no_file_output;
+	int			ty;
+	int			output_graph;
+	int			output_leaks;
 }				t_info;
 
 int				map(t_info *info);
@@ -180,5 +185,9 @@ void			do_appendix_if(t_info **info,
 t_path **shortest, int shortest_len);
 void			do_appendix_else_if(t_info **info,
 t_path **shortest, int shortest_len);
+
+void			beautiful_ants(t_info *info);
+void			output_graph(t_info *info);
+void			operate_flags(t_info *info, int argc, char **argv);
 
 #endif

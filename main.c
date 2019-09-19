@@ -22,7 +22,7 @@ void	print_file(t_info *info)
 		ft_printf("%s\n", temp_inpt->str);
 		temp_inpt = temp_inpt->next;
 	}
-	printf("\n");
+	ft_printf("\n");
 }
 
 void	do_the_rest(t_info *info)
@@ -32,22 +32,32 @@ void	do_the_rest(t_info *info)
 		efficiency(info, 0);
 	create_ants(info);
 	set_ants_delay(info);
-	fucking_ants(info);
+	if (info->beautiful_output == 1)
+		beautiful_ants(info);
+	else
+		fucking_ants(info);
+	if (info->output_leaks == 1)
+		system("leaks -q lem-in");
+	if (info->ty == 1)
+		ft_printf("\n❤️ ❤️ ❤️  THANK YOU!️️ ❤️ ❤️ ❤️\n");
 }
 
-int		main(void)
+int		main(int argc, char **argv)
 {
 	t_info *info;
 
 	info = new_info();
+	operate_flags(info, argc, argv);
 	if (map(info))
 	{
-		print_file(info);
+		if (info->no_file_output == 0)
+			print_file(info);
+		if (info->output_graph == 1)
+			output_graph(info);
 		operate(info, NULL, 0);
 		do_the_rest(info);
 	}
 	else
 		ERROR_EXIT;
-	system("leaks -q lem-in");
 	return (0);
 }

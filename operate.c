@@ -106,19 +106,19 @@ void	fucking_ants(t_info *info)
 			if (temp_ant->ant_path->actual != info->end)
 			{
 				if (temp_ant->ant_path->actual != info->start)
-					ft_printf("L%i-%s ", temp_ant->index,
+					printf("L%i-%s ", temp_ant->index,
 				temp_ant->ant_path->actual->name);
 			}
 			else if (temp_ant->at_end == 0)
 			{
-				ft_printf("L%i-%s ", temp_ant->index,
+				printf("L%i-%s ", temp_ant->index,
 				temp_ant->ant_path->actual->name);
 				temp_ant->at_end = 1;
 				remove_ant_index(info->ants_top, temp_ant->index, info);
 			}
 			temp_ant = temp_ant->next;
 		}
-		ft_printf("\n");
+		printf("\n");
 	}
 }
 
