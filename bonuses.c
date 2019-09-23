@@ -6,7 +6,7 @@
 /*   By: rzero <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 16:30:29 by rzero             #+#    #+#             */
-/*   Updated: 2019/09/19 16:30:30 by rzero            ###   ########.fr       */
+/*   Updated: 2019/09/19 17:43:35 by rzero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,10 @@ void	show_help(void)
 void	operate_flags(t_info *info, int argc, char **argv)
 {
 	if (argc > 2)
+	{
 		ft_printf("One flag at a time, please! Use flag --help to see help.\n");
+		exit(0);
+	}
 	else if (argc == 2)
 	{
 		if (!ft_strcmp(argv[1], "--beautify"))
